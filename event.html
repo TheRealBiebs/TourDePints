@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event — Seattle Tour De Pints</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    #page-content.loading .event-hero { min-height: 320px; }
+    .sk-h1  { height: 40px; width: 70%; margin-bottom: 1rem; border-radius:4px; }
+    .sk-p   { height: 16px; width: 50%; margin-bottom: 0.5rem; border-radius:4px; }
+    .sk-p2  { height: 16px; width: 35%; border-radius:4px; }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="site-brand">
+      <span class="emoji">🚲🍺</span>
+      <span>Seattle Tour De Pints</span>
+    </a>
+    <nav>
+      <a href="index.html#events">All Events</a>
+      <a href="index.html#donate">Donate</a>
+    </nav>
+  </div>
+</header>
+
+<div id="page-content" class="loading">
+  <!-- Loading placeholder -->
+  <div class="event-hero">
+    <div class="event-hero-inner">
+      <a href="index.html#events" class="back-link">← All Events</a>
+      <div class="skeleton sk-h1"></div>
+      <div class="skeleton sk-p"></div>
+      <div class="skeleton sk-p2"></div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">
+        <span class="emoji">🚲🍺</span>
+        <span id="footer-name"></span>
+      </div>
+      <p>Questions? <a href="" id="footer-email">loading...</a></p>
+      <p class="footer-seattle">Pedaling through the Emerald City since 2024</p>
+    </div>
+    <div style="text-align:right;">
+      <p style="font-size:0.82rem;">Seattle, Washington</p>
+      <p style="font-size:0.82rem; margin-top:0.4rem;">Rain or Shine 🌧️</p>
+    </div>
+    <p class="footer-copy">&copy; <span id="footer-year"></span> Seattle Tour De Pints. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script>
+// ── Footer ────────────────────────────────────────────────────────────────
+document.getElementById("footer-name").textContent = SITE.name;
+document.getElementById("footer-year").textContent = new Date().getFullYear();
+const footerEmail = document.getElementById("footer-email");
+footerEmail.href = `mailto:${SITE.contactEmail}`;
+footerEmail.textContent = SITE.contactEmail;
+
+// ── Mountain SVG (reused in event hero) ───────────────────────────────────
+const MOUNTAIN_SVG = `
+  <div class="event-bike-lane" aria-hidden="true">
+    <span class="animated-biker" style="animation-duration:7s; animation-delay:0s;">🚴💨</span>
+    <span class="animated-biker" style="animation-duration:10s; animation-delay:-4s; font-size:1.3rem; top:8px;">🚴🍺</span>
+    <span class="animated-biker" style="animation-duration:13s; animation-delay:-8s; font-size:1rem; top:13px;">🚴🌲</span>
+  </div>
+  <div class="event-hero-mountain" aria-hidden="true">
+    <svg viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,120 L0,72 C120,58 240,68 360,52 C480,36 600,46 720,34 C840,22 960,34 1080,46 C1200,58 1320,48 1440,52 L1440,120 Z"
+            fill="#1E3D55" opacity="0.4"/>
+      <path d="M0,120 L0,96 L180,88 L300,92 L400,78 L460,82 L510,68 L548,56 L568,40 L580,30 L590,25 L600,22 L610,25 L622,30 L636,40 L658,56 L694,68 L740,80 L840,88 L960,84 L1100,90 L1280,94 L1440,90 L1440,120 Z"
+            fill="#1B4332"/>
+      <path d="M590,25 L600,18 L610,25 L607,34 L600,32 L593,34 Z"
+            fill="rgba(240,240,255,0.5)"/>
+      <path d="M0,120 L0,108 C240,100 480,106 720,101 C960,96 1200,103 1440,106 L1440,120 Z"
+            fill="#0A1A10"/>
+    </svg>
+  </div>`;
+
+// ── Helpers ───────────────────────────────────────────────────────────────
+function getMonthDay(dateStr) {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const month = new Date(y, m - 1, 1).toLocaleString("en-US", { month: "short" });
+  return { month, day: d, year: y };
+}
+
+function renderEvent(ev) {
+  const { month, day, year } = getMonthDay(ev.event_date);
+  const tags        = Array.isArray(ev.tags)         ? ev.tags         : [];
+  const stops       = Array.isArray(ev.stops)        ? ev.stops        : [];
+  const donateLinks = Array.isArray(ev.donate_links) ? ev.donate_links : [];
+  const activeDonate = donateLinks.filter(d => d.url);
+
+  const waiverBtn = ev.waiver_url
+    ? `<a href="${ev.waiver_url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
+         Sign Waiver →
+       </a>`
+    : "";
+
+  const waiverSectionHtml = ev.waiver_url
+    ? `<div class="event-detail-section">
+         <h2>Liability Waiver</h2>
+         <div class="info-box">
+           <p>All participants must sign the waiver before riding. It only takes a minute.</p>
+           <ol class="steps-list">
+             <li>Click the button below to open the online waiver.</li>
+             <li>Enter your name and the event you're attending.</li>
+             <li>Sign electronically — a copy will be emailed to you.</li>
+           </ol>
+           <a href="${ev.waiver_url}" target="_blank" rel="noopener noreferrer" class="btn btn-green">
+             Sign the Waiver →
+           </a>
+         </div>
+       </div>`
+    : "";
+
+  const donateSource = activeDonate.length ? activeDonate : SITE.donateLinks.filter(d => d.url);
+  const donateHtml = donateSource.length
+    ? `<div class="event-detail-section">
+         <h2>Support the Ride</h2>
+         <p>This event is free — donations help us keep it going!</p>
+         <div class="donate-grid" style="margin-top:0.75rem;">
+           ${donateSource.map(d =>
+             `<a href="${d.url}" class="donate-card" target="_blank" rel="noopener noreferrer">
+               <div class="icon">${d.icon}</div>
+               <h3>${d.label}</h3>
+               <p>Donate via ${d.label}</p>
+             </a>`
+           ).join("")}
+         </div>
+       </div>`
+    : "";
+
+  const heroMeta = [
+    `📍 ${ev.location}`,
+    `🗓️ ${month} ${day}, ${year}`,
+    `🕙 ${ev.time_of_day}`,
+    ev.distance   ? `🚴 ${ev.distance}`   : null,
+    ev.difficulty ? `⚡ ${ev.difficulty}` : null,
+  ].filter(Boolean).map(m => `<span>${m}</span>`).join("");
+
+  const longDesc = (ev.long_description || ev.description || "")
+    .split(/\n\n+/)
+    .map(p => `<p>${p.trim()}</p>`)
+    .join("");
+
+  const stopsHtml = stops.length
+    ? `<ul class="stops-list">${stops.map(s => `<li>${s}</li>`).join("")}</ul>`
+    : `<p>Route details coming soon.</p>`;
+
+  return `
+    <div class="event-hero">
+      <div class="event-hero-inner">
+        <a href="index.html#events" class="back-link">← All Events</a>
+        <h1>${ev.title}</h1>
+        <div class="hero-meta">${heroMeta}</div>
+        <div class="hero-buttons">
+          <a href="#register" class="btn btn-gold">Register Free</a>
+          ${waiverBtn}
+        </div>
+      </div>
+      ${MOUNTAIN_SVG}
+    </div>
+
+    <div class="event-layout">
+      <!-- LEFT: Details -->
+      <div class="event-details">
+        <div class="event-detail-section">
+          <h2>About This Ride</h2>
+          ${longDesc}
+        </div>
+        <div class="event-detail-section">
+          <h2>🍺 Brewery Stops</h2>
+          ${stopsHtml}
+        </div>
+        <div class="event-detail-section">
+          <h2>What to Know</h2>
+          <ul>
+            <li>Helmets are strongly encouraged.</li>
+            <li>Follow all traffic laws — this is a public road ride.</li>
+            <li>Ride at your own pace; this is not a race.</li>
+            <li>Please drink responsibly and arrange safe transportation home.</li>
+            <li>No registration fee — this event is completely free.</li>
+          </ul>
+        </div>
+        ${waiverSectionHtml}
+        ${donateHtml}
+      </div>
+
+      <!-- RIGHT: Registration form -->
+      <div id="register">
+        <div class="sidebar-card">
+          <div class="sidebar-card-header">Reserve Your Spot — Free</div>
+          <div class="sidebar-card-body">
+            <form id="reg-form" novalidate>
+              <div class="form-grid two-col" style="margin-bottom:0.85rem;">
+                <div class="field">
+                  <label for="fname">First name *</label>
+                  <input type="text" id="fname" placeholder="Jane"
+                         required autocomplete="given-name" />
+                </div>
+                <div class="field">
+                  <label for="lname">Last name *</label>
+                  <input type="text" id="lname" placeholder="Doe"
+                         required autocomplete="family-name" />
+                </div>
+              </div>
+              <div class="field" style="margin-bottom:0.85rem;">
+                <label for="email">Email address *</label>
+                <input type="email" id="email" placeholder="jane@example.com"
+                       required autocomplete="email" />
+                <small>We'll send your confirmation and ride updates here.</small>
+              </div>
+              <button type="submit" id="submit-btn" class="btn btn-green btn-full">
+                Reserve My Spot →
+              </button>
+              <p class="text-gray text-sm text-center mt-1">
+                Free event · No payment required
+              </p>
+            </form>
+            <div id="reg-success" class="form-message success"></div>
+            <div id="reg-error"   class="form-message error"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ── Load event ────────────────────────────────────────────────────────────
+(async () => {
+  const params  = new URLSearchParams(window.location.search);
+  const slug    = params.get("id");
+  const content = document.getElementById("page-content");
+
+  function showNotFound() {
+    content.className = "";
+    content.innerHTML = `
+      <div class="not-found">
+        <h2>Event Not Found</h2>
+        <p>We couldn't find that event. It may have been removed or the link is incorrect.</p>
+        <a href="index.html" class="btn btn-green">← Back to All Events</a>
+      </div>`;
+  }
+
+  if (!slug) { showNotFound(); return; }
+
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    content.className = "";
+    content.innerHTML = `
+      <div class="not-found">
+        <h2>Database not connected</h2>
+        <p>Add your Supabase credentials to <code>js/config.js</code> to load events.</p>
+        <a href="index.html" class="btn btn-ghost">← Back</a>
+      </div>`;
+    return;
+  }
+
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  try {
+    const { data: ev, error } = await db
+      .from("events")
+      .select("*")
+      .eq("slug", slug)
+      .eq("published", true)
+      .single();
+
+    if (error || !ev) { showNotFound(); return; }
+
+    document.title = `${ev.title} — Seattle Tour De Pints`;
+    content.className = "";
+    content.innerHTML = renderEvent(ev);
+
+    // ── Registration form ─────────────────────────────────────────────────
+    const form      = document.getElementById("reg-form");
+    const submitBtn = document.getElementById("submit-btn");
+    const msgOk     = document.getElementById("reg-success");
+    const msgErr    = document.getElementById("reg-error");
+
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      msgOk.style.display = "none";
+      msgErr.style.display = "none";
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+
+      submitBtn.disabled    = true;
+      submitBtn.textContent = "Submitting…";
+
+      const payload = {
+        event_slug: ev.slug,
+        first_name: document.getElementById("fname").value.trim(),
+        last_name:  document.getElementById("lname").value.trim(),
+        email:      document.getElementById("email").value.trim().toLowerCase(),
+      };
+
+      try {
+        const { error: insertErr } = await db.from("registrations").insert(payload);
+
+        if (insertErr) {
+          if (insertErr.code === "23505") {
+            showError("Looks like you're already registered for this event! Check your inbox for your confirmation.");
+          } else {
+            console.error("Supabase error:", insertErr);
+            showError("Something went wrong. Please try again or email us directly.");
+          }
+          return;
+        }
+
+        form.style.display  = "none";
+        msgOk.textContent   = `🎉 You're in! We've reserved your spot for ${ev.title}. See you on the road!`;
+        msgOk.style.display = "block";
+
+      } catch (err) {
+        console.error("Network error:", err);
+        showError("Network error — please check your connection and try again.");
+      }
+    });
+
+    function showError(msg) {
+      msgErr.textContent    = msg;
+      msgErr.style.display  = "block";
+      submitBtn.disabled    = false;
+      submitBtn.textContent = "Reserve My Spot →";
+      msgErr.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+  } catch (err) {
+    console.error("Error loading event:", err);
+    showNotFound();
+  }
+})();
+</script>
+</body>
+</html>

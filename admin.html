@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Seattle Tour De Pints</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ── Admin-specific styles ── */
+    body { background: #f0f4f0; }
+
+    /* Login page */
+    .login-wrap {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .login-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .login-card .logo { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    .login-card h1 { font-size: 1.4rem; font-weight: 800; color: var(--green); margin-bottom: 0.25rem; }
+    .login-card p.subtitle { color: var(--gray); font-size: 0.9rem; margin-bottom: 1.5rem; }
+    .login-card .field { text-align: left; margin-bottom: 1rem; }
+    .login-error { color: #c53030; font-size: 0.88rem; margin-top: 0.5rem; min-height: 1.2em; }
+
+    /* Admin layout */
+    .admin-wrap { max-width: 1000px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+    .admin-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.75rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .admin-topbar h1 { font-size: 1.5rem; font-weight: 800; color: var(--green); }
+
+    /* Events table */
+    .events-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      font-size: 0.9rem;
+    }
+    .events-table th {
+      background: var(--green);
+      color: #fff;
+      text-align: left;
+      padding: 0.7rem 1rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .events-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+    .events-table tr:last-child td { border-bottom: none; }
+    .events-table tr:hover td { background: var(--green-pale); }
+
+    .status-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.18rem 0.6rem;
+      border-radius: 999px;
+    }
+    .status-badge.pub   { background: #c6f6d5; color: #276749; }
+    .status-badge.draft { background: #fed7d7; color: #9b2c2c; }
+
+    .action-btns { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+    .btn-edit   { background: #ebf8ff; color: #2b6cb0; border: 1px solid #bee3f8; }
+    .btn-toggle { background: #fffff0; color: #744210; border: 1px solid #faf089; }
+    .btn-del    { background: #fff5f5; color: #c53030; border: 1px solid #feb2b2; }
+    .btn-edit:hover, .btn-toggle:hover, .btn-del:hover {
+      filter: brightness(0.95);
+      transform: none;
+    }
+
+    /* ── Overlay / Form modal ── */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      overflow-y: auto;
+      padding: 2rem 1rem;
+    }
+    .overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+
+    .modal {
+      background: #fff;
+      border-radius: var(--radius);
+      width: 100%;
+      max-width: 680px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+    .modal-header {
+      background: var(--green);
+      color: #fff;
+      padding: 1rem 1.4rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+      padding: 0 0.2rem;
+      opacity: 0.8;
+    }
+    .modal-close:hover { opacity: 1; }
+    .modal-body { padding: 1.6rem; }
+
+    .form-section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: var(--green);
+      margin: 1.2rem 0 0.6rem;
+      padding-bottom: 0.3rem;
+      border-bottom: 2px solid var(--green-pale);
+    }
+
+    .modal textarea {
+      width: 100%;
+      padding: 0.6rem 0.85rem;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      font-size: 0.95rem;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 80px;
+      color: var(--dark);
+    }
+    .modal textarea:focus {
+      outline: none;
+      border-color: var(--green-light);
+      box-shadow: 0 0 0 3px rgba(64,145,108,0.15);
+    }
+
+    .modal-footer {
+      padding: 1rem 1.6rem 1.4rem;
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+      border-top: 1px solid var(--border);
+    }
+
+    .form-msg {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+      display: none;
+    }
+    .form-msg.ok  { background: var(--green-pale); color: var(--green); border: 1px solid #a8d5b5; display: block; }
+    .form-msg.err { background: #fff5f5; color: #c53030; border: 1px solid #feb2b2; display: block; }
+
+    .empty-state {
+      text-align: center;
+      padding: 2.5rem;
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 600px) {
+      .events-table thead { display: none; }
+      .events-table td {
+        display: block;
+        padding: 0.4rem 1rem;
+      }
+      .events-table tr { display: block; margin-bottom: 0.5rem; border: 1px solid var(--border); border-radius: 8px; }
+    }
+  </style>
+</head>
+<body class="admin-page">
+
+<!-- ── HEADER ── -->
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="site-brand">
+      <span class="emoji">🚲🍺</span>
+      <span>Seattle Tour De Pints</span>
+    </a>
+    <nav>
+      <a href="index.html">Public Site</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ── LOGIN VIEW ── -->
+<div id="login-view" class="login-wrap">
+  <div class="login-card">
+    <div class="logo">🔐</div>
+    <h1>Admin Login</h1>
+    <p class="subtitle">Sign in to manage events</p>
+    <form id="login-form" novalidate>
+      <div class="field">
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" placeholder="you@example.com"
+               required autocomplete="email" />
+      </div>
+      <div class="field">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" placeholder="••••••••"
+               required autocomplete="current-password" />
+      </div>
+      <button type="submit" id="login-btn" class="btn btn-green btn-full">
+        Sign In
+      </button>
+      <p class="login-error" id="login-error"></p>
+    </form>
+    <p class="text-gray text-sm mt-2">
+      Create your admin account in Supabase → Authentication → Users.
+    </p>
+  </div>
+</div>
+
+<!-- ── ADMIN VIEW ── -->
+<div id="admin-view" style="display:none;">
+  <div class="admin-wrap">
+    <div class="admin-topbar">
+      <h1>🗓️ Event Manager</h1>
+      <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+        <span id="admin-email-label" class="text-gray text-sm"></span>
+        <button class="btn btn-ghost btn-sm" id="add-event-btn">+ Add New Event</button>
+        <button class="btn btn-sm" id="logout-btn"
+                style="background:#fff;border:1px solid var(--border);color:var(--gray);">
+          Sign Out
+        </button>
+      </div>
+    </div>
+
+    <!-- Summary bar -->
+    <div id="reg-summary" class="info-box mb-2"
+         style="padding:0.9rem 1.2rem;font-size:0.9rem;color:var(--gray);"></div>
+
+    <!-- Events table -->
+    <div id="events-table-wrap">
+      <div class="empty-state">Loading events…</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADD / EDIT MODAL ── -->
+<div class="overlay" id="event-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <span id="modal-title">Add New Event</span>
+      <button class="modal-close" id="modal-close-btn" title="Close">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-msg" id="modal-msg"></div>
+
+      <p class="form-section-label">Basic Info</p>
+      <div class="form-grid two-col">
+        <div class="field" style="grid-column:1/-1;">
+          <label for="f-title">Event Title *</label>
+          <input type="text" id="f-title" placeholder="Tour De Pints: Summer Edition"
+                 required oninput="autoSlug()" />
+        </div>
+        <div class="field" style="grid-column:1/-1;">
+          <label for="f-slug">
+            URL Slug *
+            <small style="font-weight:400;color:var(--gray);">&nbsp;(lowercase, hyphens only — used in the link)</small>
+          </label>
+          <input type="text" id="f-slug" placeholder="summer-2026" required
+                 pattern="[a-z0-9-]+" />
+        </div>
+        <div class="field">
+          <label for="f-date">Event Date *</label>
+          <input type="date" id="f-date" required />
+        </div>
+        <div class="field">
+          <label for="f-time">Start Time *</label>
+          <input type="text" id="f-time" placeholder="10:00 AM" required />
+        </div>
+        <div class="field" style="grid-column:1/-1;">
+          <label for="f-location">Location *</label>
+          <input type="text" id="f-location" placeholder="Fremont Brewing, Seattle WA" required />
+        </div>
+        <div class="field">
+          <label for="f-distance">Distance</label>
+          <input type="text" id="f-distance" placeholder="~18 miles" />
+        </div>
+        <div class="field">
+          <label for="f-difficulty">Difficulty</label>
+          <input type="text" id="f-difficulty" placeholder="Easy — all paces welcome" />
+        </div>
+      </div>
+
+      <p class="form-section-label">Descriptions</p>
+      <div class="field mb-2">
+        <label for="f-desc">Short Description *
+          <small style="font-weight:400;color:var(--gray);">&nbsp;(shown on event cards)</small>
+        </label>
+        <textarea id="f-desc" rows="2"
+          placeholder="Kick off summer with a scenic ride through Fremont…" required></textarea>
+      </div>
+      <div class="field">
+        <label for="f-longdesc">Full Description
+          <small style="font-weight:400;color:var(--gray);">&nbsp;(shown on event page — use blank lines between paragraphs)</small>
+        </label>
+        <textarea id="f-longdesc" rows="5"
+          placeholder="Full details about the ride…"></textarea>
+      </div>
+
+      <p class="form-section-label">Route & Tags</p>
+      <div class="field mb-2">
+        <label for="f-stops">Brewery Stops
+          <small style="font-weight:400;color:var(--gray);">&nbsp;(one per line)</small>
+        </label>
+        <textarea id="f-stops" rows="3"
+          placeholder="Fremont Brewing (start)&#10;Optimism Brewing — Capitol Hill&#10;Holy Mountain Brewing — SoDo (finish)"></textarea>
+      </div>
+      <div class="field">
+        <label for="f-tags">Tags
+          <small style="font-weight:400;color:var(--gray);">&nbsp;(comma-separated, e.g. 18 mi, All levels, Free)</small>
+        </label>
+        <input type="text" id="f-tags" placeholder="18 mi, All levels, Free, Self-paced" />
+      </div>
+
+      <p class="form-section-label">Registration & Donations</p>
+      <div class="field mb-2">
+        <label for="f-waiver">Waiver URL</label>
+        <input type="url" id="f-waiver" placeholder="https://forms.google.com/…" />
+        <small>Link to your waiver form (Google Form, DocuSign, etc.). Leave blank to hide waiver button.</small>
+      </div>
+      <div class="form-grid" style="margin-bottom:0.5rem;">
+        <div class="field">
+          <label for="f-paypal">💳 PayPal URL</label>
+          <input type="url" id="f-paypal" placeholder="https://paypal.me/…" />
+        </div>
+        <div class="field">
+          <label for="f-venmo">📱 Venmo URL</label>
+          <input type="url" id="f-venmo" placeholder="https://venmo.com/…" />
+        </div>
+        <div class="field">
+          <label for="f-gofundme">🚀 GoFundMe URL</label>
+          <input type="url" id="f-gofundme" placeholder="https://gofundme.com/f/…" />
+        </div>
+      </div>
+
+      <p class="form-section-label">Visibility</p>
+      <label style="display:flex;align-items:center;gap:0.6rem;cursor:pointer;font-size:0.95rem;">
+        <input type="checkbox" id="f-published" checked
+               style="width:18px;height:18px;accent-color:var(--green);" />
+        Publish immediately (visible on public site)
+      </label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" id="modal-cancel-btn">Cancel</button>
+      <button class="btn btn-green" id="modal-save-btn">Save Event</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script>
+// ── Guard ─────────────────────────────────────────────────────────────────────
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  document.getElementById("login-view").innerHTML = `
+    <div class="login-card">
+      <div class="logo">⚙️</div>
+      <h1>Setup Required</h1>
+      <p class="subtitle">Add your Supabase URL and key to <code>js/config.js</code> before using the admin panel.</p>
+      <a href="SETUP.md" class="btn btn-green btn-full" style="margin-top:1rem;">View Setup Guide</a>
+    </div>`;
+}
+
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL || "https://placeholder.supabase.co", SUPABASE_ANON_KEY || "placeholder");
+
+// ── Auth state ────────────────────────────────────────────────────────────────
+db.auth.onAuthStateChange((event, session) => {
+  if (session) {
+    document.getElementById("login-view").style.display  = "none";
+    document.getElementById("admin-view").style.display  = "block";
+    document.getElementById("admin-email-label").textContent = session.user.email;
+    loadEvents();
+  } else {
+    document.getElementById("login-view").style.display  = "";
+    document.getElementById("admin-view").style.display  = "none";
+  }
+});
+
+// ── Login ─────────────────────────────────────────────────────────────────────
+document.getElementById("login-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const btn = document.getElementById("login-btn");
+  const err = document.getElementById("login-error");
+  btn.disabled = true;
+  btn.textContent = "Signing in…";
+  err.textContent = "";
+
+  const { error } = await db.auth.signInWithPassword({
+    email:    document.getElementById("login-email").value.trim(),
+    password: document.getElementById("login-password").value,
+  });
+
+  if (error) {
+    err.textContent  = error.message;
+    btn.disabled     = false;
+    btn.textContent  = "Sign In";
+  }
+  // on success, onAuthStateChange fires automatically
+});
+
+// ── Logout ────────────────────────────────────────────────────────────────────
+document.getElementById("logout-btn").addEventListener("click", () => db.auth.signOut());
+
+// ── Load events ───────────────────────────────────────────────────────────────
+let allEvents = [];
+
+async function loadEvents() {
+  const wrap = document.getElementById("events-table-wrap");
+  wrap.innerHTML = `<div class="empty-state">Loading events…</div>`;
+
+  const { data: events, error } = await db
+    .from("events")
+    .select("id, slug, title, event_date, published")
+    .order("event_date", { ascending: true });
+
+  if (error) {
+    wrap.innerHTML = `<div class="empty-state" style="color:#c53030;">Error loading events: ${error.message}</div>`;
+    return;
+  }
+
+  allEvents = events || [];
+
+  // Also load registration counts
+  const { data: regCounts } = await db
+    .from("registrations")
+    .select("event_slug");
+
+  const countMap = {};
+  (regCounts || []).forEach(r => {
+    countMap[r.event_slug] = (countMap[r.event_slug] || 0) + 1;
+  });
+
+  const totalRegs = (regCounts || []).length;
+  document.getElementById("reg-summary").textContent =
+    `📊 ${allEvents.length} event${allEvents.length !== 1 ? "s" : ""} · ${totalRegs} total registration${totalRegs !== 1 ? "s" : ""}`;
+
+  if (!allEvents.length) {
+    wrap.innerHTML = `
+      <div class="empty-state">
+        <p>No events yet.</p>
+        <p style="margin-top:0.5rem;font-size:0.85rem;">Click <strong>"+ Add New Event"</strong> to create your first one.</p>
+      </div>`;
+    return;
+  }
+
+  const rows = allEvents.map(ev => {
+    const [y, m, d] = ev.event_date.split("-").map(Number);
+    const dateLabel = new Date(y, m - 1, d).toLocaleDateString("en-US", {
+      month: "short", day: "numeric", year: "numeric"
+    });
+    const count = countMap[ev.slug] || 0;
+    const statusClass = ev.published ? "pub" : "draft";
+    const statusLabel = ev.published ? "Published" : "Draft";
+    const toggleLabel = ev.published ? "Unpublish" : "Publish";
+
+    return `
+      <tr data-id="${ev.id}">
+        <td>${ev.title}</td>
+        <td>${dateLabel}</td>
+        <td><a href="event.html?id=${ev.slug}" target="_blank" style="font-size:0.82rem;color:var(--gray);">${ev.slug}</a></td>
+        <td>${count}</td>
+        <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+        <td>
+          <div class="action-btns">
+            <button class="btn btn-sm btn-edit"   onclick="openEdit('${ev.id}')">Edit</button>
+            <button class="btn btn-sm btn-toggle" onclick="togglePublish('${ev.id}', ${ev.published})">${toggleLabel}</button>
+            <button class="btn btn-sm btn-del"    onclick="deleteEvent('${ev.id}', '${ev.title.replace(/'/g, "\\'")}')">Delete</button>
+          </div>
+        </td>
+      </tr>`;
+  }).join("");
+
+  wrap.innerHTML = `
+    <table class="events-table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Date</th>
+          <th>Slug</th>
+          <th>Registrations</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+// ── Slug auto-generation ──────────────────────────────────────────────────────
+let slugEdited = false;
+function autoSlug() {
+  if (slugEdited) return;
+  const title = document.getElementById("f-title").value;
+  document.getElementById("f-slug").value = title
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "");
+}
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("f-slug").addEventListener("input", () => { slugEdited = true; });
+});
+
+// ── Modal helpers ─────────────────────────────────────────────────────────────
+let editingId = null;
+
+function openModal(title) {
+  document.getElementById("modal-title").textContent = title;
+  document.getElementById("modal-msg").className     = "form-msg";
+  document.getElementById("modal-msg").textContent   = "";
+  document.getElementById("modal-save-btn").disabled = false;
+  document.getElementById("modal-save-btn").textContent = "Save Event";
+  document.getElementById("event-overlay").classList.add("open");
+}
+
+function closeModal() {
+  document.getElementById("event-overlay").classList.remove("open");
+  editingId   = null;
+  slugEdited  = false;
+  document.getElementById("event-form-fields") && clearForm();
+}
+
+function clearForm() {
+  ["f-title","f-slug","f-time","f-location","f-distance","f-difficulty",
+   "f-desc","f-longdesc","f-stops","f-tags","f-waiver","f-paypal","f-venmo","f-gofundme"]
+    .forEach(id => { const el = document.getElementById(id); if (el) el.value = ""; });
+  document.getElementById("f-date").value      = "";
+  document.getElementById("f-published").checked = true;
+}
+
+document.getElementById("modal-close-btn").addEventListener("click", closeModal);
+document.getElementById("modal-cancel-btn").addEventListener("click", closeModal);
+document.getElementById("event-overlay").addEventListener("click", e => {
+  if (e.target === document.getElementById("event-overlay")) closeModal();
+});
+
+// ── Add Event ─────────────────────────────────────────────────────────────────
+document.getElementById("add-event-btn").addEventListener("click", () => {
+  editingId  = null;
+  slugEdited = false;
+  clearForm();
+  openModal("Add New Event");
+});
+
+// ── Edit Event ────────────────────────────────────────────────────────────────
+async function openEdit(id) {
+  const { data: ev, error } = await db.from("events").select("*").eq("id", id).single();
+  if (error || !ev) { alert("Could not load event data."); return; }
+
+  editingId  = id;
+  slugEdited = true; // don't auto-overwrite slug when editing
+
+  document.getElementById("f-title").value      = ev.title || "";
+  document.getElementById("f-slug").value        = ev.slug  || "";
+  document.getElementById("f-date").value        = ev.event_date || "";
+  document.getElementById("f-time").value        = ev.time_of_day || "";
+  document.getElementById("f-location").value    = ev.location || "";
+  document.getElementById("f-distance").value    = ev.distance || "";
+  document.getElementById("f-difficulty").value  = ev.difficulty || "";
+  document.getElementById("f-desc").value        = ev.description || "";
+  document.getElementById("f-longdesc").value    = ev.long_description || "";
+  document.getElementById("f-stops").value       = (ev.stops || []).join("\n");
+  document.getElementById("f-tags").value        = (ev.tags || []).join(", ");
+  document.getElementById("f-waiver").value      = ev.waiver_url || "";
+  document.getElementById("f-published").checked = ev.published !== false;
+
+  const dl = Array.isArray(ev.donate_links) ? ev.donate_links : [];
+  document.getElementById("f-paypal").value    = (dl.find(d => d.label === "PayPal")    || {}).url || "";
+  document.getElementById("f-venmo").value     = (dl.find(d => d.label === "Venmo")     || {}).url || "";
+  document.getElementById("f-gofundme").value  = (dl.find(d => d.label === "GoFundMe")  || {}).url || "";
+
+  openModal("Edit Event");
+}
+
+// ── Save (create or update) ───────────────────────────────────────────────────
+document.getElementById("modal-save-btn").addEventListener("click", async () => {
+  const msg     = document.getElementById("modal-msg");
+  const saveBtn = document.getElementById("modal-save-btn");
+
+  msg.className = "form-msg";
+  msg.textContent = "";
+
+  // Validate required fields
+  const title    = document.getElementById("f-title").value.trim();
+  const slug     = document.getElementById("f-slug").value.trim();
+  const dateVal  = document.getElementById("f-date").value;
+  const timeVal  = document.getElementById("f-time").value.trim();
+  const location = document.getElementById("f-location").value.trim();
+  const desc     = document.getElementById("f-desc").value.trim();
+
+  if (!title || !slug || !dateVal || !timeVal || !location || !desc) {
+    msg.className   = "form-msg err";
+    msg.textContent = "Please fill in all required fields (Title, Slug, Date, Time, Location, Short Description).";
+    msg.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    return;
+  }
+
+  if (!/^[a-z0-9-]+$/.test(slug)) {
+    msg.className   = "form-msg err";
+    msg.textContent = "Slug can only contain lowercase letters, numbers, and hyphens.";
+    return;
+  }
+
+  saveBtn.disabled    = true;
+  saveBtn.textContent = "Saving…";
+
+  // Build donate_links array from individual fields
+  const donateLinks = [
+    { label: "PayPal",   icon: "💳", url: document.getElementById("f-paypal").value.trim() },
+    { label: "Venmo",    icon: "📱", url: document.getElementById("f-venmo").value.trim() },
+    { label: "GoFundMe", icon: "🚀", url: document.getElementById("f-gofundme").value.trim() },
+  ].filter(d => d.url);
+
+  const payload = {
+    slug,
+    title,
+    event_date:        dateVal,
+    time_of_day:       timeVal,
+    location,
+    distance:          document.getElementById("f-distance").value.trim()   || null,
+    difficulty:        document.getElementById("f-difficulty").value.trim() || null,
+    description:       desc,
+    long_description:  document.getElementById("f-longdesc").value.trim()   || null,
+    stops:             document.getElementById("f-stops").value.split("\n").map(s => s.trim()).filter(Boolean),
+    tags:              document.getElementById("f-tags").value.split(",").map(t => t.trim()).filter(Boolean),
+    waiver_url:        document.getElementById("f-waiver").value.trim()     || null,
+    donate_links:      donateLinks,
+    published:         document.getElementById("f-published").checked,
+  };
+
+  let error;
+  if (editingId) {
+    ({ error } = await db.from("events").update(payload).eq("id", editingId));
+  } else {
+    ({ error } = await db.from("events").insert(payload));
+  }
+
+  if (error) {
+    msg.className   = "form-msg err";
+    msg.textContent = error.code === "23505"
+      ? `A slug "${slug}" already exists. Choose a different slug.`
+      : `Error: ${error.message}`;
+    saveBtn.disabled    = false;
+    saveBtn.textContent = "Save Event";
+    msg.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    return;
+  }
+
+  msg.className   = "form-msg ok";
+  msg.textContent = editingId ? "✅ Event updated!" : "✅ Event created!";
+
+  setTimeout(() => {
+    closeModal();
+    loadEvents();
+  }, 800);
+});
+
+// ── Toggle publish ────────────────────────────────────────────────────────────
+async function togglePublish(id, currentlyPublished) {
+  const { error } = await db
+    .from("events")
+    .update({ published: !currentlyPublished })
+    .eq("id", id);
+
+  if (error) { alert("Error: " + error.message); return; }
+  loadEvents();
+}
+
+// ── Delete ────────────────────────────────────────────────────────────────────
+async function deleteEvent(id, title) {
+  if (!confirm(`Delete "${title}"?\n\nThis will NOT delete existing registrations, but the event page will no longer be accessible.`)) return;
+
+  const { error } = await db.from("events").delete().eq("id", id);
+  if (error) { alert("Error: " + error.message); return; }
+  loadEvents();
+}
+</script>
+</body>
+</html>

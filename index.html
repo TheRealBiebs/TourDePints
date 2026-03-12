@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seattle Tour De Pints</title>
+  <meta name="description" content="Seattle's favourite cycling brewery crawl through the Emerald City. Free to join, rain or shine." />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="site-brand">
+      <span class="emoji">🚲🍺</span>
+      <span>Seattle Tour De Pints</span>
+    </a>
+    <nav>
+      <a href="#events">Events</a>
+      <a href="#donate">Donate</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-content">
+    <p class="hero-eyebrow">☕ Seattle, WA &nbsp;·&nbsp; Rain or Shine</p>
+    <h1>Pedal.<br>Sip.<br>Repeat.</h1>
+    <p class="hero-sub" id="hero-tagline"></p>
+    <div class="hero-buttons">
+      <a href="#events" class="btn btn-gold">See Upcoming Events</a>
+      <a href="#donate"  class="btn btn-outline">Support the Ride</a>
+    </div>
+  </div>
+
+  <!-- Cyclists ride just above the mountains -->
+  <div class="bike-lane" aria-hidden="true">
+    <span class="animated-biker">🚴💨</span>
+    <span class="animated-biker">🚴🍺</span>
+    <span class="animated-biker">🚴🌲</span>
+  </div>
+
+  <!-- Mount Rainier & Cascade silhouette -->
+  <div class="hero-mountain" aria-hidden="true">
+    <svg viewBox="0 0 1440 180" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- Layer 1: Distant Olympic Mountains (west) — blue-slate haze -->
+      <path d="M0,180 L0,108 C120,90 240,102 360,84 C480,66 600,76 720,60 C840,44 960,58 1080,72 C1200,86 1320,74 1440,80 L1440,180 Z"
+            fill="#1E3D55" opacity="0.45"/>
+      <!-- Layer 2: Cascades with Mount Rainier as the dominant peak (~x=660) -->
+      <path d="M0,180 L0,148 L140,138 L260,143 L360,127 L420,132 L480,116 L530,120 L575,96 L608,72 L628,52 L643,38 L654,32 L665,38 L680,52 L702,72 L735,96 L780,116 L840,128 L940,136 L1060,130 L1180,138 L1320,143 L1440,140 L1440,180 Z"
+            fill="#1B4332"/>
+      <!-- Snow cap on Rainier -->
+      <path d="M643,38 L654,28 L665,38 L661,50 L654,47 L647,50 Z"
+            fill="rgba(240,240,255,0.55)"/>
+      <!-- Layer 3: Dark foreground ridge / treeline -->
+      <path d="M0,180 L0,164 C240,154 480,161 720,155 C960,149 1200,157 1440,160 L1440,180 Z"
+            fill="#0A1A10"/>
+    </svg>
+  </div>
+</div>
+
+<!-- EVENTS -->
+<section id="events" class="page-section">
+  <h2 class="section-title">Upcoming Events</h2>
+  <div class="events-grid" id="events-list">
+    <div class="skeleton-card">
+      <div class="skeleton sk-badge"></div>
+      <div class="sk-body">
+        <div class="skeleton sk-title"></div>
+        <div class="skeleton sk-meta"></div>
+        <div class="skeleton sk-desc"></div>
+        <div class="skeleton sk-desc2"></div>
+      </div>
+    </div>
+    <div class="skeleton-card">
+      <div class="skeleton sk-badge"></div>
+      <div class="sk-body">
+        <div class="skeleton sk-title"></div>
+        <div class="skeleton sk-meta"></div>
+        <div class="skeleton sk-desc"></div>
+        <div class="skeleton sk-desc2"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="page-section section-alt">
+  <h2 class="section-title">About the Ride</h2>
+
+  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+    <div>
+      <p style="color:var(--text-mid); margin-bottom:1rem;">
+        Tour De Pints is Seattle's self-paced cycling brewery crawl — a free, social
+        ride through the Emerald City's most beloved neighborhoods, with stops at some
+        of the finest craft breweries in the Pacific Northwest.
+      </p>
+      <p style="color:var(--text-mid); margin-bottom:1rem;">
+        From Fremont to Georgetown, Ballard to Capitol Hill, each route tells a different
+        story of the city. No race timers, no entry fees, no judgment — just good people,
+        good bikes, and the kind of beer you can only find in Seattle.
+      </p>
+      <p style="color:var(--text-mid);">
+        Questions? <a href="" id="about-email">loading...</a>
+      </p>
+    </div>
+    <div>
+      <p style="color:var(--text-mid); font-style:italic; border-left:3px solid var(--gold); padding-left:1rem; margin-bottom:1rem; line-height:1.7;">
+        "Fueled by coffee. Rewarded with craft beer. Washed down by Seattle rain."
+      </p>
+      <p style="color:var(--text-mid); margin-bottom:1rem;">
+        Participants ride at their own pace and are responsible for following traffic laws,
+        wearing helmets, and drinking responsibly. This is a public road ride, not a race.
+      </p>
+      <div class="seattle-badges">
+        <span class="seattle-badge">🏔️ Mountain Views</span>
+        <span class="seattle-badge">🌧️ Rain or Shine</span>
+        <span class="seattle-badge">☕ Coffee Capital</span>
+        <span class="seattle-badge">🚲 Bike-Friendly City</span>
+        <span class="seattle-badge">🍺 Craft Beer Scene</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DONATE -->
+<section id="donate" class="page-section">
+  <h2 class="section-title">Support the Ride</h2>
+  <p style="color:var(--text-mid); margin-bottom:1.5rem; max-width:580px;">
+    Every ride is completely free to join. If you'd like to help cover route permits,
+    event supplies, and keep future rides rolling, any donation is deeply appreciated.
+  </p>
+  <div class="donate-grid" id="donate-grid"></div>
+  <p style="color:var(--text-light); font-size:0.78rem; margin-top:1rem;">
+    Donations are not tax-deductible. Every dollar goes directly to event costs.
+  </p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">
+        <span class="emoji">🚲🍺</span>
+        <span id="footer-name"></span>
+      </div>
+      <p>Questions? <a href="" id="footer-email">loading...</a></p>
+      <p class="footer-seattle">Pedaling through the Emerald City since 2024</p>
+    </div>
+    <div style="text-align:right;">
+      <p style="font-size:0.82rem;">Seattle, Washington</p>
+      <p style="font-size:0.82rem; margin-top:0.4rem;">Rain or Shine 🌧️</p>
+    </div>
+    <p class="footer-copy">&copy; <span id="footer-year"></span> Seattle Tour De Pints. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script>
+// ── Static text ───────────────────────────────────────────────────────────
+document.getElementById("hero-tagline").textContent = SITE.tagline;
+document.getElementById("footer-name").textContent  = SITE.name;
+document.getElementById("footer-year").textContent  = new Date().getFullYear();
+
+["about-email", "footer-email"].forEach(id => {
+  const el = document.getElementById(id);
+  el.href = `mailto:${SITE.contactEmail}`;
+  el.textContent = SITE.contactEmail;
+});
+
+// ── Donate section ────────────────────────────────────────────────────────
+const donateGrid = document.getElementById("donate-grid");
+const activeLinks = SITE.donateLinks.filter(d => d.url);
+
+if (activeLinks.length) {
+  activeLinks.forEach(d => {
+    const a = document.createElement("a");
+    a.className = "donate-card";
+    a.href      = d.url;
+    a.target    = "_blank";
+    a.rel       = "noopener noreferrer";
+    a.innerHTML = `<div class="icon">${d.icon}</div><h3>${d.label}</h3><p>Donate via ${d.label}</p>`;
+    donateGrid.appendChild(a);
+  });
+} else {
+  donateGrid.innerHTML = `
+    <p class="text-gray text-sm">
+      Donation links coming soon — add them to <code>js/config.js</code>.
+    </p>`;
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────
+function getMonthDay(dateStr) {
+  const [y, m, d] = dateStr.split("-").map(Number);
+  const month = new Date(y, m - 1, 1).toLocaleString("en-US", { month: "short" });
+  return { month, day: d };
+}
+
+function renderEventCard(ev) {
+  const { month, day } = getMonthDay(ev.event_date);
+  const tags = Array.isArray(ev.tags) ? ev.tags : [];
+
+  const card = document.createElement("a");
+  card.className = "event-card";
+  card.href = `event.html?id=${ev.slug}`;
+  card.innerHTML = `
+    <div class="date-badge">
+      <div class="month">${month}</div>
+      <div class="day">${day}</div>
+    </div>
+    <div class="event-card-info">
+      <h3>${ev.title}</h3>
+      <div class="event-meta">
+        <span>📍 ${ev.location}</span>
+        <span>🕙 ${ev.time_of_day}</span>
+        ${ev.distance ? `<span>🚴 ${ev.distance}</span>` : ""}
+      </div>
+      <p class="desc">${ev.description || ""}</p>
+      <div class="event-card-footer">
+        <div class="tags">
+          ${tags.map(t => `<span class="tag">${t}</span>`).join("")}
+        </div>
+        <span class="btn btn-green btn-sm" style="pointer-events:none;">View &amp; Register →</span>
+      </div>
+    </div>
+  `;
+  return card;
+}
+
+// ── Fetch events ──────────────────────────────────────────────────────────
+(async () => {
+  const list = document.getElementById("events-list");
+
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+    list.innerHTML = `
+      <div class="info-box">
+        <p>⚙️ <strong>Setup needed:</strong> Add your Supabase credentials to <code>js/config.js</code>.</p>
+        <p class="text-sm text-gray mt-1">See <code>SETUP.md</code> for instructions.</p>
+      </div>`;
+    return;
+  }
+
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  try {
+    const { data: events, error } = await db
+      .from("events")
+      .select("*")
+      .eq("published", true)
+      .order("event_date", { ascending: true });
+
+    if (error) throw error;
+
+    list.innerHTML = "";
+
+    if (!events || events.length === 0) {
+      list.innerHTML = `<p class="text-gray">No events scheduled yet — check back soon! 🚴</p>`;
+      return;
+    }
+
+    events.forEach(ev => list.appendChild(renderEventCard(ev)));
+
+  } catch (err) {
+    console.error("Error loading events:", err);
+    list.innerHTML = `
+      <div class="info-box">
+        <p>⚠️ Could not load events. Please try refreshing the page.</p>
+        <p class="text-sm text-gray mt-1">${err.message || ""}</p>
+      </div>`;
+  }
+})();
+</script>
+</body>
+</html>
