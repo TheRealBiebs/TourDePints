@@ -25,12 +25,58 @@
 
 <!-- HERO -->
 <div class="hero">
+
+  <!-- STICKER WALL — brewery & fun stickers scattered like a dive bar bathroom -->
+  <div class="sticker-wall" aria-hidden="true">
+
+    <!-- LEFT SIDE -->
+    <div class="sticker sticker-circle sticker-green"
+         style="top:8%;left:0.5%;transform:rotate(-13deg);">FREMONT<br>BREWING<br>CO.</div>
+
+    <div class="sticker sticker-rect sticker-black"
+         style="top:30%;left:-4px;transform:rotate(7deg);">HOLY<br>MOUNTAIN<br>BREWING</div>
+
+    <div class="sticker sticker-tag sticker-yellow"
+         style="top:52%;left:1.5%;transform:rotate(-6deg);">KEEP PEDALING!</div>
+
+    <div class="sticker sticker-circle sticker-red"
+         style="top:67%;left:0.5%;transform:rotate(9deg);">HELLBENT<br>BREWING</div>
+
+    <div class="sticker sticker-circle sticker-white"
+         style="top:82%;left:3.5%;transform:rotate(-7deg);width:70px;height:70px;font-family:'Permanent Marker',cursive;font-size:1.3rem;">206</div>
+
+    <!-- RIGHT SIDE -->
+    <div class="sticker sticker-circle sticker-amber"
+         style="top:7%;right:0.5%;transform:rotate(11deg);">GEORGETOWN<br>BREWING<br>CO.</div>
+
+    <div class="sticker sticker-rect sticker-navy"
+         style="top:28%;right:-4px;transform:rotate(-8deg);">OPTIMISM<br>BREWING CO.</div>
+
+    <div class="sticker sticker-tag sticker-teal"
+         style="top:50%;right:1.5%;transform:rotate(4deg);">☔ RAIN OR SHINE</div>
+
+    <div class="sticker sticker-circle sticker-orange"
+         style="top:66%;right:0.5%;transform:rotate(-11deg);">STOUP<br>BREWING</div>
+
+    <div class="sticker sticker-rect sticker-blue"
+         style="top:80%;right:3%;transform:rotate(7deg);">CLOUDBURST<br>BREWING</div>
+
+    <!-- TOP STRIP -->
+    <div class="sticker sticker-tag sticker-black"
+         style="top:1.5%;left:37%;transform:rotate(-2deg);font-size:0.7rem;">🌲 SEATTLE MADE 🌲</div>
+
+    <!-- PNG image stickers injected here automatically by js/stickers.js.
+         To add a sticker: drop a PNG into images/stickers/ and add its
+         filename to images/stickers/manifest.json — no HTML edits needed. -->
+
+  </div><!-- /sticker-wall -->
+
   <div class="hero-content">
     <p class="hero-eyebrow">☕ Seattle, WA &nbsp;·&nbsp; Rain or Shine</p>
-    <h1>Pedal.<br>Sip.<br>Repeat.</h1>
+    <h1>Tour<br>De<br>Pints</h1>
     <p class="hero-sub" id="hero-tagline"></p>
     <div class="hero-buttons">
-      <a href="#events" class="btn btn-gold">See Upcoming Events</a>
+      <a href="#events" class="btn btn-gold">See Upcoming Rides</a>
       <a href="#donate"  class="btn btn-outline">Support the Ride</a>
     </div>
   </div>
@@ -138,6 +184,50 @@
   </p>
 </section>
 
+<!-- ADD YOUR STICKER -->
+<section id="add-sticker" class="page-section sticker-upload-section">
+  <h2 class="section-title sticker-upload-title">Slap Your Sticker on the Wall</h2>
+  <p class="sticker-upload-sub">
+    Got a local brewery sticker, bike club patch, or any Seattle goodness?
+    Upload it here and it'll show up on the wall next time the page loads.
+  </p>
+  <button class="btn btn-outline" id="open-sticker-upload">🍺 Upload Your Sticker</button>
+</section>
+
+<!-- UPLOAD MODAL -->
+<div id="sticker-modal" class="upload-modal-overlay" aria-hidden="true" style="display:none;">
+  <div class="upload-modal-box" role="dialog" aria-modal="true" aria-labelledby="upload-modal-title">
+
+    <h3 id="upload-modal-title" class="upload-modal-heading">Stick It on the Wall</h3>
+    <p class="upload-modal-sub">PNG, JPG, or WEBP · max 2 MB · keep it Seattle-friendly</p>
+
+    <div class="upload-drop-zone" id="upload-drop-zone">
+      <!-- Hidden file input — triggered by clicking the drop zone -->
+      <input type="file" id="sticker-file-input"
+             accept="image/png,image/jpeg,image/webp,image/gif"
+             style="display:none;" />
+
+      <div class="upload-drop-label">
+        <span class="upload-drop-icon">🏷️</span>
+        <span class="upload-drop-text">Click to browse or drag & drop</span>
+        <span class="upload-drop-hint">PNG · JPG · WEBP — max 2 MB</span>
+      </div>
+
+      <div id="upload-preview" class="upload-preview" style="display:none;">
+        <img id="upload-preview-img" src="" alt="Sticker preview" />
+        <button type="button" id="upload-clear" class="upload-clear-btn" aria-label="Remove selected file">✕ Remove</button>
+      </div>
+    </div>
+
+    <div class="upload-actions">
+      <button class="btn btn-gold" id="upload-submit" disabled>Stick It Up There 🍺</button>
+      <button class="btn btn-ghost btn-sm" id="upload-cancel">Cancel</button>
+    </div>
+
+    <div id="upload-status" class="upload-status" style="display:none;" aria-live="polite"></div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
@@ -147,7 +237,7 @@
         <span id="footer-name"></span>
       </div>
       <p>Questions? <a href="" id="footer-email">loading...</a></p>
-      <p class="footer-seattle">Pedaling through the Emerald City since 2024</p>
+      <p class="footer-seattle">Pedaling through the Emerald City since 2016</p>
     </div>
     <div style="text-align:right;">
       <p style="font-size:0.82rem;">Seattle, Washington</p>
@@ -159,6 +249,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
+<script src="js/stickers.js"></script>
 <script>
 // ── Static text ───────────────────────────────────────────────────────────
 document.getElementById("hero-tagline").textContent = SITE.tagline;

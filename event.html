@@ -61,6 +61,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
+<script src="js/stickers.js"></script>
 <script>
 // ── Footer ────────────────────────────────────────────────────────────────
 document.getElementById("footer-name").textContent = SITE.name;
@@ -69,8 +70,19 @@ const footerEmail = document.getElementById("footer-email");
 footerEmail.href = `mailto:${SITE.contactEmail}`;
 footerEmail.textContent = SITE.contactEmail;
 
-// ── Mountain SVG (reused in event hero) ───────────────────────────────────
+// ── Mountain SVG + sticker wall (reused in event hero) ────────────────────
 const MOUNTAIN_SVG = `
+  <div class="sticker-wall" aria-hidden="true">
+    <div class="sticker sticker-circle sticker-green"
+         style="top:10%;left:0.5%;transform:rotate(-10deg);">FREMONT<br>BREWING<br>CO.</div>
+    <div class="sticker sticker-tag sticker-yellow"
+         style="top:60%;left:1.5%;transform:rotate(-5deg);">KEEP PEDALING!</div>
+    <div class="sticker sticker-circle sticker-amber"
+         style="top:10%;right:0.5%;transform:rotate(9deg);">GEORGETOWN<br>BREWING<br>CO.</div>
+    <div class="sticker sticker-tag sticker-teal"
+         style="top:57%;right:1.5%;transform:rotate(4deg);">☔ RAIN OR SHINE</div>
+    <!-- PNG image stickers injected here by js/stickers.js after render -->
+  </div>
   <div class="event-bike-lane" aria-hidden="true">
     <span class="animated-biker" style="animation-duration:7s; animation-delay:0s;">🚴💨</span>
     <span class="animated-biker" style="animation-duration:10s; animation-delay:-4s; font-size:1.3rem; top:8px;">🚴🍺</span>
@@ -284,6 +296,7 @@ function renderEvent(ev) {
     document.title = `${ev.title} — Seattle Tour De Pints`;
     content.className = "";
     content.innerHTML = renderEvent(ev);
+    window.placeAllStickers(); // scatter PNG stickers into the now-present sticker-wall
 
     // ── Registration form ─────────────────────────────────────────────────
     const form      = document.getElementById("reg-form");

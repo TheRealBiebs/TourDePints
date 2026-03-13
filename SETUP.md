@@ -166,7 +166,56 @@ Per-event donate links are managed in the admin panel.
 
 ---
 
-## Step 8 — Host the site (optional)
+## Step 8 — Set up the Sticker Wall (Supabase Storage)
+
+The sticker wall on the homepage pulls images from a Supabase Storage bucket.
+Visitors can also upload their own stickers via the "Upload Your Sticker" button.
+
+### 8a — Create the bucket
+
+1. In your Supabase dashboard, go to **Storage** in the left sidebar.
+2. Click **New bucket**.
+3. Name it exactly: `stickers`
+4. Toggle **Public bucket** ON (this makes images publicly readable without auth).
+5. Click **Save**.
+
+### 8b — Set Storage access policies
+
+Go to **Storage → Policies** and add these two policies for the `stickers` bucket:
+
+```sql
+-- Allow anyone to view sticker images
+CREATE POLICY "Public sticker read"
+ON storage.objects FOR SELECT
+USING (bucket_id = 'stickers');
+
+-- Allow anonymous (unauthenticated) visitors to upload stickers
+CREATE POLICY "Anon sticker upload"
+ON storage.objects FOR INSERT
+WITH CHECK (bucket_id = 'stickers');
+```
+
+You can run these in **SQL Editor**, or use the Storage Policies UI to create them
+(set the target table to `storage.objects`, the operation to SELECT / INSERT, and
+the `using` / `with check` expression as shown above).
+
+### 8c — Seed your first stickers
+
+1. Go to **Storage → stickers**.
+2. Click **Upload files** and drop in your PNG/JPG sticker files.
+3. Reload the homepage — the stickers will appear scattered on the hero wall.
+
+### Managing stickers
+
+- **Add** a sticker at any time by uploading to the `stickers` bucket — it appears
+  on the next page load. No code changes needed.
+- **Remove** a sticker by deleting it from the Supabase Storage dashboard.
+- Visitor-uploaded stickers land in the same bucket and appear immediately on reload.
+  Review and delete anything unwanted from the Storage dashboard.
+
+---
+
+## Step 9 — Host the site (optional)
 
 Plain HTML/CSS/JS — no build step required. Just upload the files.
 
@@ -188,3 +237,6 @@ Plain HTML/CSS/JS — no build step required. Just upload the files.
 | "Slug already exists" on save | Pick a different slug — each must be unique |
 | Admin login fails | Make sure you created a user in Supabase → Authentication → Users |
 | CORS error in console | Make sure your `SUPABASE_URL` has no trailing slash |
+| Stickers don't appear | Check that the `stickers` bucket exists and is set to **Public** |
+| Upload gives "row level security" error | Run the two Storage policies from Step 8b |
+| Upload gives "Bucket not found" error | Double-check the bucket is named exactly `stickers` |
