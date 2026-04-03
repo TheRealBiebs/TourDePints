@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Waiver — Seattle Tour De Pints</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    .waiver-wrap {
+      max-width: 720px;
+      margin: 2.5rem auto;
+      padding: 0 1.25rem 4rem;
+    }
+    .waiver-back {
+      display: inline-block;
+      margin-bottom: 1.25rem;
+      color: var(--text-mid);
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+    .waiver-back:hover { color: var(--gold); }
+
+    .waiver-card {
+      background: var(--bar-mid);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .waiver-card-header {
+      background: var(--forest, #1B4332);
+      color: #fff;
+      padding: 1.1rem 1.5rem;
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+    .waiver-card-header span {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 400;
+      opacity: 0.75;
+      margin-top: 0.15rem;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .waiver-body {
+      padding: 1.5rem;
+      max-height: 42vh;
+      overflow-y: auto;
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--text-mid);
+      border-bottom: 1px solid var(--border);
+    }
+    .waiver-body h3 {
+      color: var(--worn-white);
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+    }
+    .waiver-body h4 {
+      color: var(--worn-white);
+      font-size: 0.88rem;
+      margin: 1rem 0 0.3rem;
+    }
+    .waiver-body ol { padding-left: 1.25rem; }
+    .waiver-body li { margin-bottom: 0.75rem; }
+
+    .waiver-form { padding: 1.5rem; }
+
+    .waiver-checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    .waiver-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      font-size: 0.92rem;
+      color: var(--text-mid);
+      cursor: pointer;
+    }
+    .waiver-checkbox input[type="checkbox"] {
+      width: 17px;
+      height: 17px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      accent-color: var(--gold);
+      cursor: pointer;
+    }
+
+    .sig-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .sig-wrap {
+      position: relative;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      overflow: hidden;
+      margin-bottom: 0.4rem;
+    }
+    .sig-wrap canvas {
+      display: block;
+      width: 100%;
+      height: 160px;
+      cursor: crosshair;
+      touch-action: none;
+    }
+    .sig-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #bbb;
+      font-size: 0.9rem;
+      pointer-events: none;
+      user-select: none;
+    }
+    .sig-clear {
+      background: none;
+      border: none;
+      color: var(--text-light);
+      font-size: 0.8rem;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+      margin-bottom: 1.25rem;
+      display: block;
+    }
+    .sig-clear:hover { color: var(--text-mid); }
+
+    .waiver-submit-row {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .waiver-err {
+      color: #e07070;
+      font-size: 0.87rem;
+      margin-top: 0.6rem;
+      display: none;
+    }
+    .waiver-success {
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+    }
+    .waiver-success h2 {
+      color: var(--gold);
+      font-family: 'Permanent Marker', cursive;
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+    }
+    .waiver-success p { color: var(--text-mid); margin-bottom: 1.25rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="site-brand">
+      <span class="emoji">🚲🍺</span>
+      <span>Seattle Tour De Pints</span>
+    </a>
+  </div>
+</header>
+
+<div class="waiver-wrap">
+  <a id="back-link" href="index.html" class="waiver-back">← Back to Event</a>
+
+  <div class="waiver-card" id="waiver-card">
+    <div class="waiver-card-header">
+      Liability Waiver &amp; Registration
+      <span id="waiver-event-name">Loading…</span>
+    </div>
+
+    <div class="waiver-body" id="waiver-body"></div>
+
+    <div class="waiver-form" id="waiver-form-section">
+      <div class="waiver-checkbox-group">
+        <label class="waiver-checkbox">
+          <input type="checkbox" id="check-read" />
+          <span>I have read and understood the above waiver and agree to its terms on behalf of myself.</span>
+        </label>
+        <label class="waiver-checkbox">
+          <input type="checkbox" id="check-helmet" />
+          <span>I confirm that I will wear a helmet for the entire duration of the ride. I understand helmets are required and I will bring one.</span>
+        </label>
+        <label class="waiver-checkbox">
+          <input type="checkbox" id="check-age" />
+          <span>I confirm that I am 21 years of age or older.</span>
+        </label>
+      </div>
+
+      <p class="sig-label">Sign Below</p>
+      <div class="sig-wrap">
+        <canvas id="sig-canvas"></canvas>
+        <p class="sig-placeholder" id="sig-placeholder">Draw your signature here</p>
+      </div>
+      <button class="sig-clear" id="sig-clear">Clear signature</button>
+
+      <div class="waiver-submit-row">
+        <button id="waiver-submit" class="btn btn-gold">Submit &amp; Register →</button>
+        <span style="color:var(--text-light); font-size:0.82rem;">Free event · No payment required</span>
+      </div>
+      <p class="waiver-err" id="waiver-err"></p>
+    </div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/footer.js"></script>
+<script>
+// ── Read URL params ───────────────────────────────────────────────────────
+const params    = new URLSearchParams(window.location.search);
+const eventSlug = params.get("slug")  || "";
+const firstName = params.get("fname") || "";
+const lastName  = params.get("lname") || "";
+const email     = params.get("email") || "";
+const eventTitle = decodeURIComponent(params.get("title") || "the event");
+
+// If missing required params, go home
+if (!eventSlug || !firstName || !lastName || !email) {
+  window.location.replace("index.html");
+}
+
+document.getElementById("back-link").href         = `event.html?id=${eventSlug}`;
+document.getElementById("waiver-event-name").textContent = eventTitle;
+document.getElementById("waiver-body").innerHTML  = WAIVER_TEXT;
+
+// ── Signature canvas ──────────────────────────────────────────────────────
+const canvas      = document.getElementById("sig-canvas");
+const ctx         = canvas.getContext("2d");
+const placeholder = document.getElementById("sig-placeholder");
+let drawing       = false;
+let hasSig        = false;
+
+function resizeCanvas() {
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const dpr  = window.devicePixelRatio || 1;
+  canvas.width  = rect.width  * dpr;
+  canvas.height = 160         * dpr;
+  ctx.scale(dpr, dpr);
+  ctx.strokeStyle = "#111";
+  ctx.lineWidth   = 2.2;
+  ctx.lineCap     = "round";
+  ctx.lineJoin    = "round";
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+function pos(e) {
+  const r = canvas.getBoundingClientRect();
+  const src = e.touches ? e.touches[0] : e;
+  return { x: src.clientX - r.left, y: src.clientY - r.top };
+}
+
+canvas.addEventListener("mousedown",  e => { drawing = true; ctx.beginPath(); const p = pos(e); ctx.moveTo(p.x, p.y); });
+canvas.addEventListener("mousemove",  e => { if (!drawing) return; const p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); hasSig = true; placeholder.style.display = "none"; });
+canvas.addEventListener("mouseup",    () => { drawing = false; });
+canvas.addEventListener("mouseleave", () => { drawing = false; });
+canvas.addEventListener("touchstart", e => { e.preventDefault(); drawing = true; ctx.beginPath(); const p = pos(e); ctx.moveTo(p.x, p.y); }, { passive: false });
+canvas.addEventListener("touchmove",  e => { e.preventDefault(); if (!drawing) return; const p = pos(e); ctx.lineTo(p.x, p.y); ctx.stroke(); hasSig = true; placeholder.style.display = "none"; }, { passive: false });
+canvas.addEventListener("touchend",   () => { drawing = false; });
+
+document.getElementById("sig-clear").addEventListener("click", () => {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  hasSig = false;
+  placeholder.style.display = "";
+});
+
+// ── Submit ────────────────────────────────────────────────────────────────
+document.getElementById("waiver-submit").addEventListener("click", async () => {
+  const errEl  = document.getElementById("waiver-err");
+  const btn    = document.getElementById("waiver-submit");
+  errEl.style.display = "none";
+
+  if (!document.getElementById("check-read").checked) {
+    errEl.textContent = "Please read and agree to the waiver.";
+    errEl.style.display = "block"; return;
+  }
+  if (!document.getElementById("check-helmet").checked) {
+    errEl.textContent = "Please confirm you will bring a helmet.";
+    errEl.style.display = "block"; return;
+  }
+  if (!document.getElementById("check-age").checked) {
+    errEl.textContent = "You must be 21 or older to participate.";
+    errEl.style.display = "block"; return;
+  }
+  if (!hasSig) {
+    errEl.textContent = "Please sign in the box above.";
+    errEl.style.display = "block"; return;
+  }
+
+  btn.disabled    = true;
+  btn.textContent = "Submitting…";
+
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  try {
+    // Upload signature image
+    const sigBlob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+    const sigPath = `${eventSlug}/${Date.now()}-${email.replace(/[^a-z0-9]/gi, "_")}.png`;
+    const { error: uploadErr } = await db.storage.from("signatures").upload(sigPath, sigBlob, { contentType: "image/png" });
+    if (uploadErr) throw uploadErr;
+
+    const { data: urlData } = db.storage.from("signatures").getPublicUrl(sigPath);
+    const signatureUrl = urlData.publicUrl;
+
+    // Insert waiver record
+    const { error: waiverErr } = await db.from("waivers").insert({
+      event_slug: eventSlug,
+      first_name: firstName,
+      last_name:  lastName,
+      email:      email.toLowerCase(),
+      signature_url: signatureUrl,
+    });
+    if (waiverErr) throw waiverErr;
+
+    // Insert registration
+    const { error: regErr } = await db.from("registrations").insert({
+      event_slug: eventSlug,
+      first_name: firstName,
+      last_name:  lastName,
+      email:      email.toLowerCase(),
+    });
+    if (regErr && regErr.code !== "23505") throw regErr;
+
+    // Send confirmation email (best-effort — don't block success if it fails)
+    try {
+      await db.functions.invoke("send-confirmation", {
+        body: { first_name: firstName, email: email.toLowerCase(), event_title: eventTitle, event_slug: eventSlug },
+      });
+    } catch (emailErr) {
+      console.warn("Confirmation email failed:", emailErr);
+    }
+
+    // Show success
+    const shareUrl   = "https://tourdepints.com";
+    const shareText  = encodeURIComponent(`I just signed up for ${eventTitle} — a free bike & brew ride in Seattle! Join me 🚲🍺`);
+    const shareUrlEnc = encodeURIComponent(shareUrl);
+
+    document.getElementById("waiver-card").innerHTML = `
+      <div class="waiver-success">
+        <h2>🎉 You're In!</h2>
+        <p>Your waiver is signed and your spot is reserved for <strong>${eventTitle}</strong>.</p>
+        <p>See you on the road, ${firstName}!</p>
+        <a href="event.html?id=${eventSlug}" class="btn btn-gold" style="margin-bottom:2rem;">← Back to Event</a>
+
+        <div style="border-top:1px solid var(--border);padding-top:1.5rem;margin-top:0.5rem;">
+          <p style="font-family:'Oswald',sans-serif;font-size:0.8rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:1rem;">🎉 Spread the word!</p>
+          <p style="color:var(--text-mid);font-size:0.9rem;margin-bottom:1.25rem;">The more the merrier — tell your friends about the ride.</p>
+          <div style="display:flex;gap:0.6rem;flex-wrap:wrap;justify-content:center;">
+            <a href="https://www.facebook.com/sharer/sharer.php?u=${shareUrlEnc}" target="_blank" rel="noopener"
+               style="display:inline-flex;align-items:center;gap:0.4rem;background:#1877F2;color:#fff;padding:0.55rem 1rem;border-radius:7px;font-size:0.88rem;font-weight:600;text-decoration:none;">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.32l-.53 3.5h-2.79V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+              Facebook
+            </a>
+            <a href="https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrlEnc}" target="_blank" rel="noopener"
+               style="display:inline-flex;align-items:center;gap:0.4rem;background:#000;color:#fff;padding:0.55rem 1rem;border-radius:7px;font-size:0.88rem;font-weight:600;text-decoration:none;">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+              X / Twitter
+            </a>
+            <a href="https://www.instagram.com/" target="_blank" rel="noopener"
+               style="display:inline-flex;align-items:center;gap:0.4rem;background:linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);color:#fff;padding:0.55rem 1rem;border-radius:7px;font-size:0.88rem;font-weight:600;text-decoration:none;">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              Instagram
+            </a>
+            <button id="copy-link-btn"
+               style="display:inline-flex;align-items:center;gap:0.4rem;background:var(--bar-mid);color:var(--text-mid);border:1px solid var(--border);padding:0.55rem 1rem;border-radius:7px;font-size:0.88rem;font-weight:600;cursor:pointer;">
+              <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span id="copy-link-label">Copy Link</span>
+            </button>
+          </div>
+        </div>
+      </div>`;
+
+    document.getElementById("copy-link-btn").addEventListener("click", () => {
+      navigator.clipboard.writeText(shareUrl).then(() => {
+        const lbl = document.getElementById("copy-link-label");
+        lbl.textContent = "Copied!";
+        setTimeout(() => { lbl.textContent = "Copy Link"; }, 2000);
+      });
+    });
+
+  } catch (err) {
+    console.error(err);
+    errEl.textContent   = err.message || "Something went wrong — please try again.";
+    errEl.style.display = "block";
+    btn.disabled    = false;
+    btn.textContent = "Submit & Register →";
+  }
+});
+</script>
+</body>
+</html>

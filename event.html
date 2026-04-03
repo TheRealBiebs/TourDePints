@@ -41,35 +41,13 @@
 </div>
 
 <!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div>
-      <div class="footer-brand">
-        <span class="emoji">🚲🍺</span>
-        <span id="footer-name"></span>
-      </div>
-      <p>Questions? <a href="" id="footer-email">loading...</a></p>
-      <p class="footer-seattle">Pedaling through the Emerald City since 2024</p>
-    </div>
-    <div style="text-align:right;">
-      <p style="font-size:0.82rem;">Seattle, Washington</p>
-      <p style="font-size:0.82rem; margin-top:0.4rem;">Rain or Shine 🌧️</p>
-    </div>
-    <p class="footer-copy">&copy; <span id="footer-year"></span> Seattle Tour De Pints. All rights reserved.</p>
-  </div>
-</footer>
+<div id="site-footer"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
+<script src="js/footer.js"></script>
 <script src="js/stickers.js"></script>
 <script>
-// ── Footer ────────────────────────────────────────────────────────────────
-document.getElementById("footer-name").textContent = SITE.name;
-document.getElementById("footer-year").textContent = new Date().getFullYear();
-const footerEmail = document.getElementById("footer-email");
-footerEmail.href = `mailto:${SITE.contactEmail}`;
-footerEmail.textContent = SITE.contactEmail;
-
 // ── Mountain SVG + sticker wall (reused in event hero) ────────────────────
 const MOUNTAIN_SVG = `
   <div class="sticker-wall" aria-hidden="true">
@@ -115,30 +93,8 @@ function renderEvent(ev) {
   const donateLinks = Array.isArray(ev.donate_links) ? ev.donate_links : [];
   const activeDonate = donateLinks.filter(d => d.url);
 
-  const waiverBtn = ev.waiver_url
-    ? `<a href="${ev.waiver_url}" target="_blank" rel="noopener noreferrer" class="btn btn-outline">
-         Sign Waiver →
-       </a>`
-    : "";
 
-  const waiverSectionHtml = ev.waiver_url
-    ? `<div class="event-detail-section">
-         <h2>Liability Waiver</h2>
-         <div class="info-box">
-           <p>All participants must sign the waiver before riding. It only takes a minute.</p>
-           <ol class="steps-list">
-             <li>Click the button below to open the online waiver.</li>
-             <li>Enter your name and the event you're attending.</li>
-             <li>Sign electronically — a copy will be emailed to you.</li>
-           </ol>
-           <a href="${ev.waiver_url}" target="_blank" rel="noopener noreferrer" class="btn btn-green">
-             Sign the Waiver →
-           </a>
-         </div>
-       </div>`
-    : "";
-
-  const donateSource = activeDonate.length ? activeDonate : SITE.donateLinks.filter(d => d.url);
+  const donateSource = activeDonate;
   const donateHtml = donateSource.length
     ? `<div class="event-detail-section">
          <h2>Support the Ride</h2>
@@ -180,7 +136,6 @@ function renderEvent(ev) {
         <div class="hero-meta">${heroMeta}</div>
         <div class="hero-buttons">
           <a href="#register" class="btn btn-gold">Register Free</a>
-          ${waiverBtn}
         </div>
       </div>
       ${MOUNTAIN_SVG}
@@ -200,14 +155,14 @@ function renderEvent(ev) {
         <div class="event-detail-section">
           <h2>What to Know</h2>
           <ul>
-            <li>Helmets are strongly encouraged.</li>
+            <li>Helmets are absolutely required.</li>
             <li>Follow all traffic laws — this is a public road ride.</li>
             <li>Ride at your own pace; this is not a race.</li>
-            <li>Please drink responsibly and arrange safe transportation home.</li>
+            <li>Please drink responsibly. Or better yet, don't drink at all.</li>
             <li>No registration fee — this event is completely free.</li>
+            <li>Liability waiver required — you will sign it during registration.</li>
           </ul>
         </div>
-        ${waiverSectionHtml}
         ${donateHtml}
       </div>
 
@@ -239,15 +194,16 @@ function renderEvent(ev) {
                 Reserve My Spot →
               </button>
               <p class="text-gray text-sm text-center mt-1">
-                Free event · No payment required
+                Free event · You will be asked to sign a waiver
               </p>
             </form>
-            <div id="reg-success" class="form-message success"></div>
-            <div id="reg-error"   class="form-message error"></div>
+            <div id="reg-success" class="form-message success" style="display:none;"></div>
+            <div id="reg-error"   class="form-message error"   style="display:none;"></div>
           </div>
         </div>
       </div>
     </div>
+
   `;
 }
 
@@ -304,43 +260,20 @@ function renderEvent(ev) {
     const msgOk     = document.getElementById("reg-success");
     const msgErr    = document.getElementById("reg-error");
 
-    form.addEventListener("submit", async e => {
+    // Validate fields then redirect to waiver page
+    form.addEventListener("submit", e => {
       e.preventDefault();
-      msgOk.style.display = "none";
       msgErr.style.display = "none";
       if (!form.checkValidity()) { form.reportValidity(); return; }
 
-      submitBtn.disabled    = true;
-      submitBtn.textContent = "Submitting…";
-
-      const payload = {
-        event_slug: ev.slug,
-        first_name: document.getElementById("fname").value.trim(),
-        last_name:  document.getElementById("lname").value.trim(),
-        email:      document.getElementById("email").value.trim().toLowerCase(),
-      };
-
-      try {
-        const { error: insertErr } = await db.from("registrations").insert(payload);
-
-        if (insertErr) {
-          if (insertErr.code === "23505") {
-            showError("Looks like you're already registered for this event! Check your inbox for your confirmation.");
-          } else {
-            console.error("Supabase error:", insertErr);
-            showError("Something went wrong. Please try again or email us directly.");
-          }
-          return;
-        }
-
-        form.style.display  = "none";
-        msgOk.textContent   = `🎉 You're in! We've reserved your spot for ${ev.title}. See you on the road!`;
-        msgOk.style.display = "block";
-
-      } catch (err) {
-        console.error("Network error:", err);
-        showError("Network error — please check your connection and try again.");
-      }
+      const p = new URLSearchParams({
+        slug:  ev.slug,
+        title: encodeURIComponent(ev.title),
+        fname: document.getElementById("fname").value.trim(),
+        lname: document.getElementById("lname").value.trim(),
+        email: document.getElementById("email").value.trim().toLowerCase(),
+      });
+      window.location.href = `waiver.html?${p.toString()}`;
     });
 
     function showError(msg) {

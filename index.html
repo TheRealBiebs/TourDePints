@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Seattle Tour De Pints</title>
-  <meta name="description" content="Seattle's favourite cycling brewery crawl through the Emerald City. Free to join, rain or shine." />
+  <meta name="description" content="Seattle's biggest bike and brew. Free to join, rain or shine." />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -19,6 +19,7 @@
     <nav>
       <a href="#events">Events</a>
       <a href="#donate">Donate</a>
+      <a href="#community">Stay Updated</a>
     </nav>
   </div>
 </header>
@@ -63,7 +64,7 @@
 
     <!-- TOP STRIP -->
     <div class="sticker sticker-tag sticker-black"
-         style="top:1.5%;left:37%;transform:rotate(-2deg);font-size:0.7rem;">🌲 SEATTLE MADE 🌲</div>
+         style="top:1.5%;left:37%;transform:rotate(-2deg);font-size:0.7rem;">🌲 HOMEBREWED IN SEATTLE 🌲</div>
 
     <!-- PNG image stickers injected here automatically by js/stickers.js.
          To add a sticker: drop a PNG into images/stickers/ and add its
@@ -72,12 +73,19 @@
   </div><!-- /sticker-wall -->
 
   <div class="hero-content">
-    <p class="hero-eyebrow">☕ Seattle, WA &nbsp;·&nbsp; Rain or Shine</p>
     <h1>Tour<br>De<br>Pints</h1>
     <p class="hero-sub" id="hero-tagline"></p>
     <div class="hero-buttons">
       <a href="#events" class="btn btn-gold">See Upcoming Rides</a>
       <a href="#donate"  class="btn btn-outline">Support the Ride</a>
+    </div>
+    <div id="hero-countdown" class="hero-countdown" style="display:none;">
+      <div class="countdown-days-wrap">
+        <span class="countdown-number" id="countdown-days">—</span>
+        <span class="countdown-label">days until</span>
+      </div>
+      <div class="countdown-event-name" id="countdown-event-name"></div>
+      <a id="countdown-cta" href="#" class="btn btn-gold btn-sm countdown-cta">Reserve My Spot →</a>
     </div>
   </div>
 
@@ -88,21 +96,11 @@
     <span class="animated-biker">🚴🌲</span>
   </div>
 
-  <!-- Mount Rainier & Cascade silhouette -->
-  <div class="hero-mountain" aria-hidden="true">
-    <svg viewBox="0 0 1440 180" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- Layer 1: Distant Olympic Mountains (west) — blue-slate haze -->
-      <path d="M0,180 L0,108 C120,90 240,102 360,84 C480,66 600,76 720,60 C840,44 960,58 1080,72 C1200,86 1320,74 1440,80 L1440,180 Z"
-            fill="#1E3D55" opacity="0.45"/>
-      <!-- Layer 2: Cascades with Mount Rainier as the dominant peak (~x=660) -->
-      <path d="M0,180 L0,148 L140,138 L260,143 L360,127 L420,132 L480,116 L530,120 L575,96 L608,72 L628,52 L643,38 L654,32 L665,38 L680,52 L702,72 L735,96 L780,116 L840,128 L940,136 L1060,130 L1180,138 L1320,143 L1440,140 L1440,180 Z"
-            fill="#1B4332"/>
-      <!-- Snow cap on Rainier -->
-      <path d="M643,38 L654,28 L665,38 L661,50 L654,47 L647,50 Z"
-            fill="rgba(240,240,255,0.55)"/>
-      <!-- Layer 3: Dark foreground ridge / treeline -->
-      <path d="M0,180 L0,164 C240,154 480,161 720,155 C960,149 1200,157 1440,160 L1440,180 Z"
-            fill="#0A1A10"/>
+  <!-- Wave divider -->
+  <div class="hero-wave" aria-hidden="true">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M0,0 C240,80 480,0 720,40 C960,80 1200,20 1440,60 L1440,80 L0,80 Z"
+            fill="#15100A"/>
     </svg>
   </div>
 </div>
@@ -134,38 +132,44 @@
 
 <!-- ABOUT -->
 <section id="about" class="page-section section-alt">
-  <h2 class="section-title">About the Ride</h2>
+  <h2 class="section-title">About the Tour</h2>
 
   <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
     <div>
       <p style="color:var(--text-mid); margin-bottom:1rem;">
-        Tour De Pints is Seattle's self-paced cycling brewery crawl — a free, social
-        ride through the Emerald City's most beloved neighborhoods, with stops at some
-        of the finest craft breweries in the Pacific Northwest.
+        The Tour De Pints are semi-guided group rides for riders of all skill levels. 
+        The routes are different every year, but always aim to stick to separated bike paths, bike lanes, and bike friendly streets.
+        Along the way we stop at local breweries, especially bike themed ones, for beers and swag raffles, and we make friends along the way.
       </p>
       <p style="color:var(--text-mid); margin-bottom:1rem;">
-        From Fremont to Georgetown, Ballard to Capitol Hill, each route tells a different
-        story of the city. No race timers, no entry fees, no judgment — just good people,
-        good bikes, and the kind of beer you can only find in Seattle.
+        Homegrown in Seattle, the ride is organized by volunteers and supported by local breweries.
+        There are different events for different parts of town, including West Seattle, North Seattle, and the East side. If you're interested in bringing a ride to your neighborhood, or want to help out with organizing, shoot us an email or join the Discord!
       </p>
       <p style="color:var(--text-mid);">
         Questions? <a href="" id="about-email">loading...</a>
       </p>
+            <p style="color:var(--text-mid);">
+         Connect with the Community<a href="https://discord.gg/PYJP5Nnf6h">Join the Discord</a>
+      </p>
     </div>
     <div>
       <p style="color:var(--text-mid); font-style:italic; border-left:3px solid var(--gold); padding-left:1rem; margin-bottom:1rem; line-height:1.7;">
-        "Fueled by coffee. Rewarded with craft beer. Washed down by Seattle rain."
+        "Literally the funnest thing in the entire world"- Andrew B.
+      </p>
+            <p style="color:var(--text-mid); font-style:italic; border-left:3px solid var(--gold); padding-left:1rem; margin-bottom:1rem; line-height:1.7;">
+        "When are y'all gonna make shirts?" - You, probably.
       </p>
       <p style="color:var(--text-mid); margin-bottom:1rem;">
-        Participants ride at their own pace and are responsible for following traffic laws,
-        wearing helmets, and drinking responsibly. This is a public road ride, not a race.
+        Participants ride at their own pace and are responsible for following traffic laws.
+        Helmets are required for every ride. Drinking is not required or even technically recommended. 
+        While car-contact is minimal, riders should be comfortable riding in groups and navigating city streets.
       </p>
       <div class="seattle-badges">
-        <span class="seattle-badge">🏔️ Mountain Views</span>
+        <span class="seattle-badge">💸 Always Free</span>
         <span class="seattle-badge">🌧️ Rain or Shine</span>
-        <span class="seattle-badge">☕ Coffee Capital</span>
-        <span class="seattle-badge">🚲 Bike-Friendly City</span>
-        <span class="seattle-badge">🍺 Craft Beer Scene</span>
+        <span class="seattle-badge">☕ Beer Not Required</span>
+        <span class="seattle-badge">🚲 All Skill Levels</span>
+        <span class="seattle-badge">🍺 21+</span>
       </div>
     </div>
   </div>
@@ -175,23 +179,44 @@
 <section id="donate" class="page-section">
   <h2 class="section-title">Support the Ride</h2>
   <p style="color:var(--text-mid); margin-bottom:1.5rem; max-width:580px;">
-    Every ride is completely free to join. If you'd like to help cover route permits,
-    event supplies, and keep future rides rolling, any donation is deeply appreciated.
+    Every ride is completely free to join. If you'd like to help cover event supplies, and keep future rides rolling, any donation is appreciated.
   </p>
   <div class="donate-grid" id="donate-grid"></div>
   <p style="color:var(--text-light); font-size:0.78rem; margin-top:1rem;">
-    Donations are not tax-deductible. Every dollar goes directly to event costs.
+    Donations are not tax-deductible. Every dollar goes directly to event costs and growing future events.
   </p>
 </section>
 
-<!-- ADD YOUR STICKER -->
-<section id="add-sticker" class="page-section sticker-upload-section">
-  <h2 class="section-title sticker-upload-title">Slap Your Sticker on the Wall</h2>
-  <p class="sticker-upload-sub">
-    Got a local brewery sticker, bike club patch, or any Seattle goodness?
-    Upload it here and it'll show up on the wall next time the page loads.
-  </p>
-  <button class="btn btn-outline" id="open-sticker-upload">🍺 Upload Your Sticker</button>
+<!-- COMMUNITY BAR -->
+<section id="community" class="community-bar">
+  <!-- Stay in the loop -->
+  <div class="community-col" id="mailing-list">
+    <p class="community-col-label">Hear About New Rides</p>
+    <form id="mailing-form" novalidate class="community-email-form">
+      <input type="text"  id="ml-fname" placeholder="First name" autocomplete="given-name" />
+      <input type="email" id="ml-email" placeholder="your@email.com" required autocomplete="email" />
+      <button type="submit" class="btn btn-gold btn-sm" id="ml-btn">Notify Me</button>
+    </form>
+    <p id="ml-success" style="display:none; color:var(--gold); font-size:0.85rem; margin-top:0.4rem;">🎉 You're on the list!</p>
+    <p id="ml-error"   style="display:none; color:#e07070; font-size:0.82rem; margin-top:0.4rem;"></p>
+  </div>
+
+  <div class="community-divider"></div>
+
+  <!-- Swag vote -->
+  <div class="community-col" id="swag" style="text-align:center;">
+    <p class="community-col-label">Should We Make Swag?</p>
+    <button id="swag-btn" class="btn btn-outline btn-sm">Yes, make it happen!</button>
+    <p id="swag-count" style="color:var(--text-light); font-size:0.78rem; margin-top:0.4rem; min-height:1em;"></p>
+  </div>
+
+  <div class="community-divider"></div>
+
+  <!-- Sticker wall -->
+  <div class="community-col" id="add-sticker" style="text-align:center;">
+    <p class="community-col-label">Add Your Sticker</p>
+    <button class="btn btn-outline btn-sm" id="open-sticker-upload">Upload a Sticker</button>
+  </div>
 </section>
 
 <!-- UPLOAD MODAL -->
@@ -229,59 +254,29 @@
 </div>
 
 <!-- FOOTER -->
-<footer>
-  <div class="footer-inner">
-    <div>
-      <div class="footer-brand">
-        <span class="emoji">🚲🍺</span>
-        <span id="footer-name"></span>
-      </div>
-      <p>Questions? <a href="" id="footer-email">loading...</a></p>
-      <p class="footer-seattle">Pedaling through the Emerald City since 2016</p>
-    </div>
-    <div style="text-align:right;">
-      <p style="font-size:0.82rem;">Seattle, Washington</p>
-      <p style="font-size:0.82rem; margin-top:0.4rem;">Rain or Shine 🌧️</p>
-    </div>
-    <p class="footer-copy">&copy; <span id="footer-year"></span> Seattle Tour De Pints. All rights reserved.</p>
-  </div>
-</footer>
+<div id="site-footer"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
+<script src="js/footer.js"></script>
 <script src="js/stickers.js"></script>
 <script>
 // ── Static text ───────────────────────────────────────────────────────────
 document.getElementById("hero-tagline").textContent = SITE.tagline;
-document.getElementById("footer-name").textContent  = SITE.name;
-document.getElementById("footer-year").textContent  = new Date().getFullYear();
-
-["about-email", "footer-email"].forEach(id => {
-  const el = document.getElementById(id);
-  el.href = `mailto:${SITE.contactEmail}`;
-  el.textContent = SITE.contactEmail;
-});
+const aboutEmail = document.getElementById("about-email");
+if (aboutEmail) {
+  aboutEmail.href = `mailto:${SITE.contactEmail}`;
+  aboutEmail.textContent = SITE.contactEmail;
+}
 
 // ── Donate section ────────────────────────────────────────────────────────
 const donateGrid = document.getElementById("donate-grid");
-const activeLinks = SITE.donateLinks.filter(d => d.url);
-
-if (activeLinks.length) {
-  activeLinks.forEach(d => {
-    const a = document.createElement("a");
-    a.className = "donate-card";
-    a.href      = d.url;
-    a.target    = "_blank";
-    a.rel       = "noopener noreferrer";
-    a.innerHTML = `<div class="icon">${d.icon}</div><h3>${d.label}</h3><p>Donate via ${d.label}</p>`;
-    donateGrid.appendChild(a);
-  });
-} else {
-  donateGrid.innerHTML = `
-    <p class="text-gray text-sm">
-      Donation links coming soon — add them to <code>js/config.js</code>.
-    </p>`;
-}
+donateGrid.innerHTML = `
+  <a href="https://www.venmo.com/u/CyclingCicerone" class="donate-card" target="_blank" rel="noopener noreferrer">
+    <div class="icon">📱</div>
+    <h3>Venmo</h3>
+    <p>Donate via Venmo</p>
+  </a>`;
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 function getMonthDay(dateStr) {
@@ -355,6 +350,24 @@ function renderEventCard(ev) {
 
     events.forEach(ev => list.appendChild(renderEventCard(ev)));
 
+    // ── Hero countdown ────────────────────────────────────────────────────
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const next = events.find(ev => {
+      const [y, m, d] = ev.event_date.split("-").map(Number);
+      return new Date(y, m - 1, d) >= today;
+    });
+    if (next) {
+      const [y, m, d] = next.event_date.split("-").map(Number);
+      const eventDate = new Date(y, m - 1, d);
+      const days = Math.round((eventDate - today) / 86400000);
+      document.getElementById("countdown-days").textContent      = days === 0 ? "TODAY" : days;
+      document.getElementById("countdown-label") && (document.querySelector(".countdown-label").textContent = days === 0 ? "—" : "days until");
+      document.getElementById("countdown-event-name").textContent = next.title;
+      document.getElementById("countdown-cta").href              = `event.html?id=${next.slug}#register`;
+      document.getElementById("hero-countdown").style.display    = "flex";
+    }
+
   } catch (err) {
     console.error("Error loading events:", err);
     list.innerHTML = `
@@ -364,6 +377,72 @@ function renderEventCard(ev) {
       </div>`;
   }
 })();
+
+// ── Swag vote ─────────────────────────────────────────────────────────────
+(async () => {
+  const btn      = document.getElementById("swag-btn");
+  const countEl  = document.getElementById("swag-count");
+  const voted    = localStorage.getItem("swag-voted");
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  async function loadCount() {
+    const { data } = await db.from("swag_votes").select("count").eq("id", 1).single();
+    if (data) countEl.textContent = `${data.count.toLocaleString()} ${data.count === 1 ? "person wants" : "people want"} swag`;
+  }
+
+  await loadCount();
+
+  if (voted) {
+    btn.textContent = "👕 You already voted!";
+    btn.disabled = true;
+  }
+
+  btn.addEventListener("click", async () => {
+    if (localStorage.getItem("swag-voted")) return;
+    localStorage.setItem("swag-voted", "1");
+    btn.textContent = "👕 You already voted!";
+    btn.disabled = true;
+    await db.rpc("increment_swag");
+    await loadCount();
+  });
+})();
+
+// ── Mailing list ──────────────────────────────────────────────────────────
+document.getElementById("mailing-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const btn     = document.getElementById("ml-btn");
+  const success = document.getElementById("ml-success");
+  const errEl   = document.getElementById("ml-error");
+  const email   = document.getElementById("ml-email").value.trim().toLowerCase();
+  const fname   = document.getElementById("ml-fname").value.trim();
+
+  if (!email) { document.getElementById("ml-email").reportValidity(); return; }
+
+  errEl.style.display = "none";
+  btn.disabled = true;
+  btn.textContent = "Signing up…";
+
+  const { createClient } = supabase;
+  const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const { error } = await db.from("mailing_list").insert({ email, first_name: fname || null });
+
+  if (error) {
+    if (error.code === "23505") {
+      errEl.textContent = "You're already on the list!";
+    } else {
+      errEl.textContent = "Something went wrong — please try again.";
+      console.error(error);
+    }
+    errEl.style.display = "block";
+    btn.disabled = false;
+    btn.textContent = "Notify Me →";
+    return;
+  }
+
+  document.getElementById("mailing-form").style.display = "none";
+  success.style.display = "block";
+});
 </script>
 </body>
 </html>

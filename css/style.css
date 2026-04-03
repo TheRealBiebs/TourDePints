@@ -204,6 +204,51 @@ header nav a:hover, header nav a.active {
   z-index: 2;
 }
 
+.hero-countdown {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  position: relative;
+  z-index: 2;
+}
+
+.countdown-days-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.countdown-number {
+  font-family: 'Permanent Marker', cursive;
+  font-size: clamp(3.5rem, 10vw, 6rem);
+  color: var(--gold);
+  line-height: 1;
+  text-shadow: 2px 2px 12px rgba(0,0,0,0.6);
+}
+
+.countdown-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-mid);
+}
+
+.countdown-event-name {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--worn-white);
+  text-align: center;
+  max-width: 340px;
+}
+
+.countdown-cta {
+  margin-top: 0.5rem;
+}
+
 /* ── STICKER SYSTEM ──────────────────────────────────────────────────────── */
 .sticker-wall {
   position: absolute;
@@ -316,6 +361,16 @@ header nav a:hover, header nav a.active {
 }
 
 .hero-mountain svg { width: 100%; height: auto; display: block; }
+
+.hero-wave {
+  position: relative;
+  z-index: 1;
+  line-height: 0;
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+.hero-wave svg { width: 100%; height: auto; display: block; }
 
 /* ── PAGE WRAPPER / SECTIONS ─────────────────────────────────────────────── */
 .page-section {
@@ -939,6 +994,63 @@ footer a:hover   { color: var(--gold-light); }
    ───────────────────────────────────────────────────────────────────────── */
 
 /* Section on the homepage */
+/* ── Community bar ───────────────────────────────────────────────────────── */
+.community-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 1.5rem 2rem;
+  background: var(--bar-mid);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.community-col {
+  flex: 1;
+  min-width: 200px;
+  max-width: 340px;
+  padding: 0.75rem 1.5rem;
+}
+
+.community-col-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+}
+
+.community-email-form {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.community-email-form input {
+  flex: 1;
+  min-width: 90px;
+  padding: 0.4rem 0.65rem;
+  font-size: 0.85rem;
+}
+
+.community-divider {
+  width: 1px;
+  height: 60px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  .community-divider { display: none; }
+  .community-col { text-align: center; border-top: 1px solid var(--border); padding: 1rem 1rem; }
+  .community-col:first-child { border-top: none; }
+  .community-email-form { justify-content: center; }
+}
+
 .sticker-upload-section {
   text-align: center;
   border-top: 1px solid rgba(255,255,255,0.07);

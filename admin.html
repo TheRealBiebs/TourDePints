@@ -559,8 +559,9 @@ function closeModal() {
 
 function clearForm() {
   ["f-title","f-slug","f-time","f-location","f-distance","f-difficulty",
-   "f-desc","f-longdesc","f-stops","f-tags","f-waiver","f-paypal","f-venmo","f-gofundme"]
+   "f-desc","f-longdesc","f-stops","f-tags","f-waiver","f-paypal","f-gofundme"]
     .forEach(id => { const el = document.getElementById(id); if (el) el.value = ""; });
+  document.getElementById("f-venmo").value = "https://www.venmo.com/u/CyclingCicerone";
   document.getElementById("f-date").value      = "";
   document.getElementById("f-published").checked = true;
 }
