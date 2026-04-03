@@ -109,6 +109,7 @@ header {
 
 .site-brand:hover { color: var(--gold-light); }
 .site-brand .emoji { font-size: 1.2rem; }
+.brand-logo { height: 3rem; width: auto; display: inline-block; vertical-align: middle; }
 
 header nav { display: flex; gap: 0.4rem; flex-wrap: wrap; }
 
@@ -1382,8 +1383,14 @@ body.admin-page .text-gray  { color: #555; }
   .event-card       { flex-direction: column; gap: 0.7rem; }
   .page-section     { padding: 2rem 1rem; }
   .footer-inner     { grid-template-columns: 1fr; }
-  .hero             { min-height: 480px; }
+  .hero             { min-height: 400px; }
   .hero h1          { font-size: 2.6rem; }
+  .hero-buttons     { gap: 0.5rem; }
+  .hero-buttons .btn { padding: 0.55rem 1rem; font-size: 0.88rem; }
+  header nav        { display: none; }
+  .about-grid       { grid-template-columns: 1fr !important; }
   .event-hero-inner { padding: 2rem 1rem 1.25rem; }
-  .sticker-wall     { display: none; }
+  .sticker-wall     { display: block; }
+  .sticker-img      { max-width: 60px !important; }
+  .sticker          { font-size: 0.5rem !important; padding: 0.25rem 0.35rem !important; }
 }

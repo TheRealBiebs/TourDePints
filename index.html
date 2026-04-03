@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Seattle Tour De Pints</title>
   <meta name="description" content="Seattle's biggest bike and brew. Free to join, rain or shine." />
+  <link rel="icon" href="images/rider.png" type="image/png" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
@@ -13,13 +14,12 @@
 <header>
   <div class="header-inner">
     <a href="index.html" class="site-brand">
-      <span class="emoji">🚲🍺</span>
+      <img src="images/rider.png" alt="Tour De Pints" class="brand-logo" />
       <span>Seattle Tour De Pints</span>
     </a>
     <nav>
       <a href="#events">Events</a>
       <a href="#donate">Donate</a>
-      <a href="#community">Stay Updated</a>
     </nav>
   </div>
 </header>
@@ -30,41 +30,9 @@
   <!-- STICKER WALL — brewery & fun stickers scattered like a dive bar bathroom -->
   <div class="sticker-wall" aria-hidden="true">
 
-    <!-- LEFT SIDE -->
-    <div class="sticker sticker-circle sticker-green"
-         style="top:8%;left:0.5%;transform:rotate(-13deg);">FREMONT<br>BREWING<br>CO.</div>
-
-    <div class="sticker sticker-rect sticker-black"
-         style="top:30%;left:-4px;transform:rotate(7deg);">HOLY<br>MOUNTAIN<br>BREWING</div>
-
-    <div class="sticker sticker-tag sticker-yellow"
-         style="top:52%;left:1.5%;transform:rotate(-6deg);">KEEP PEDALING!</div>
-
-    <div class="sticker sticker-circle sticker-red"
-         style="top:67%;left:0.5%;transform:rotate(9deg);">HELLBENT<br>BREWING</div>
-
-    <div class="sticker sticker-circle sticker-white"
-         style="top:82%;left:3.5%;transform:rotate(-7deg);width:70px;height:70px;font-family:'Permanent Marker',cursive;font-size:1.3rem;">206</div>
-
-    <!-- RIGHT SIDE -->
-    <div class="sticker sticker-circle sticker-amber"
-         style="top:7%;right:0.5%;transform:rotate(11deg);">GEORGETOWN<br>BREWING<br>CO.</div>
-
-    <div class="sticker sticker-rect sticker-navy"
-         style="top:28%;right:-4px;transform:rotate(-8deg);">OPTIMISM<br>BREWING CO.</div>
-
-    <div class="sticker sticker-tag sticker-teal"
-         style="top:50%;right:1.5%;transform:rotate(4deg);">☔ RAIN OR SHINE</div>
-
-    <div class="sticker sticker-circle sticker-orange"
-         style="top:66%;right:0.5%;transform:rotate(-11deg);">STOUP<br>BREWING</div>
-
-    <div class="sticker sticker-rect sticker-blue"
-         style="top:80%;right:3%;transform:rotate(7deg);">CLOUDBURST<br>BREWING</div>
-
     <!-- TOP STRIP -->
     <div class="sticker sticker-tag sticker-black"
-         style="top:1.5%;left:37%;transform:rotate(-2deg);font-size:0.7rem;">🌲 HOMEBREWED IN SEATTLE 🌲</div>
+         style="top:1.5%;left:37%;transform:rotate(-2deg);font-size:0.7rem;">HOMEBREWED IN SEATTLE</div>
 
     <!-- PNG image stickers injected here automatically by js/stickers.js.
          To add a sticker: drop a PNG into images/stickers/ and add its
@@ -134,16 +102,16 @@
 <section id="about" class="page-section section-alt">
   <h2 class="section-title">About the Tour</h2>
 
-  <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+  <div class="about-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
     <div>
       <p style="color:var(--text-mid); margin-bottom:1rem;">
-        The Tour De Pints are semi-guided group rides for riders of all skill levels. 
+        Founded in 2011, The Tour De Pints are semi-guided group rides for riders of all skill levels. Originally just a single ride, there are now multiple Seattle tours for different areas!
         The routes are different every year, but always aim to stick to separated bike paths, bike lanes, and bike friendly streets.
         Along the way we stop at local breweries, especially bike themed ones, for beers and swag raffles, and we make friends along the way.
       </p>
       <p style="color:var(--text-mid); margin-bottom:1rem;">
         Homegrown in Seattle, the ride is organized by volunteers and supported by local breweries.
-        There are different events for different parts of town, including West Seattle, North Seattle, and the East side. If you're interested in bringing a ride to your neighborhood, or want to help out with organizing, shoot us an email or join the Discord!
+        There are different events for different parts of town, including West Seattle, North Seattle, and the East Side. If you're interested in bringing a ride to your neighborhood, or want to help out with organizing, shoot us an email or join the Discord!
       </p>
       <p style="color:var(--text-mid);">
         Questions? <a href="" id="about-email">loading...</a>
@@ -245,7 +213,7 @@
     </div>
 
     <div class="upload-actions">
-      <button class="btn btn-gold" id="upload-submit" disabled>Stick It Up There 🍺</button>
+      <button class="btn btn-gold" id="upload-submit" disabled>Stick It</button>
       <button class="btn btn-ghost btn-sm" id="upload-cancel">Cancel</button>
     </div>
 

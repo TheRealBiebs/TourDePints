@@ -37,6 +37,14 @@ const ZONES = [
   { side:'left',  sideMin:15, sideMax:60, topMin:83, topMax:92, wMin:115, wMax:165 },
 ];
 
+// Tighter zones for narrow screens — small stickers peek in from left/right edges only
+const ZONES_MOBILE = [
+  { side:'left',  sideMin:-5, sideMax:2, topMin:5,  topMax:40, wMin:52, wMax:68 },
+  { side:'left',  sideMin:-5, sideMax:2, topMin:45, topMax:82, wMin:52, wMax:68 },
+  { side:'right', sideMin:-5, sideMax:2, topMin:5,  topMax:40, wMin:52, wMax:68 },
+  { side:'right', sideMin:-5, sideMax:2, topMin:45, topMax:82, wMin:52, wMax:68 },
+];
+
 function rand(min, max) {
   return min + Math.random() * (max - min);
 }
@@ -44,7 +52,7 @@ function rand(min, max) {
 // ---------------------------------------------------------------------------
 // Placement
 // ---------------------------------------------------------------------------
-function placeStickersInWall(wall, urls) {
+function placeStickersInWall(wall, urls, zones = ZONES) {
   // Remove any previously placed image stickers so re-calling is safe
   wall.querySelectorAll('img.sticker-img').forEach(el => el.remove());
 
@@ -52,7 +60,7 @@ function placeStickersInWall(wall, urls) {
   const shuffled = [...urls].sort(() => Math.random() - 0.5);
 
   shuffled.forEach((url, i) => {
-    const zone   = ZONES[i % ZONES.length];
+    const zone   = zones[i % zones.length];
     const top    = rand(zone.topMin,  zone.topMax).toFixed(1);
     const offset = rand(zone.sideMin, zone.sideMax).toFixed(1);
     const width  = Math.round(rand(zone.wMin, zone.wMax));
@@ -97,8 +105,9 @@ async function loadStickerUrls() {
 async function placeAllStickers() {
   const urls = await loadStickerUrls();
   if (!urls.length) return;
+  const isMobile = window.innerWidth < 600;
   document.querySelectorAll('.sticker-wall').forEach(wall => {
-    placeStickersInWall(wall, urls);
+    placeStickersInWall(wall, urls, isMobile ? ZONES_MOBILE : ZONES);
   });
 }
 
@@ -129,6 +138,10 @@ async function uploadSticker(file) {
     .upload(filename, file, { cacheControl: '3600', upsert: false });
 
   if (error) throw new Error(error.message || 'Upload failed. Please try again.');
+
+  // Notify admin (best-effort — don't block on failure)
+  db.functions.invoke('notify-sticker-upload', { body: { filename } }).catch(() => {});
+
   return filename;
 }
 
@@ -240,7 +253,7 @@ function initUploadModal() {
 
     try {
       await uploadSticker(selectedFile);
-      submitBtn.textContent = 'Stick It Up There 🍺';
+      submitBtn.textContent = 'Stick It';
       clearSelection();
       // Show success with reload option
       status.innerHTML =
@@ -250,7 +263,7 @@ function initUploadModal() {
       status.style.display = 'block';
     } catch (err) {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Stick It Up There 🍺';
+      submitBtn.textContent = 'Stick It';
       showStatus('⚠️ ' + err.message, 'error');
     }
   });

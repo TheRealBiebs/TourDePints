@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Waiver — Seattle Tour De Pints</title>
+  <link rel="icon" href="images/rider.png" type="image/png" />
   <link rel="stylesheet" href="css/style.css" />
   <style>
     .waiver-wrap {
@@ -168,7 +169,7 @@
 <header>
   <div class="header-inner">
     <a href="index.html" class="site-brand">
-      <span class="emoji">🚲🍺</span>
+      <img src="images/rider.png" alt="Tour De Pints" class="brand-logo" />
       <span>Seattle Tour De Pints</span>
     </a>
   </div>
@@ -342,7 +343,7 @@ document.getElementById("waiver-submit").addEventListener("click", async () => {
     // Send confirmation email (best-effort — don't block success if it fails)
     try {
       await db.functions.invoke("send-confirmation", {
-        body: { first_name: firstName, email: email.toLowerCase(), event_title: eventTitle, event_slug: eventSlug },
+        body: { first_name: firstName, last_name: lastName, email: email.toLowerCase(), event_title: eventTitle, event_slug: eventSlug },
       });
     } catch (emailErr) {
       console.warn("Confirmation email failed:", emailErr);
