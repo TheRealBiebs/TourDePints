@@ -161,7 +161,8 @@
   <div class="community-col" id="mailing-list">
     <p class="community-col-label">Hear About New Rides</p>
     <form id="mailing-form" novalidate class="community-email-form">
-      <input type="text"  id="ml-fname" placeholder="First name" autocomplete="given-name" />
+      <input type="text"  id="ml-fname" placeholder="First name"  autocomplete="given-name" />
+      <input type="text"  id="ml-lname" placeholder="Last name"   autocomplete="family-name" />
       <input type="email" id="ml-email" placeholder="your@email.com" required autocomplete="email" />
       <button type="submit" class="btn btn-gold btn-sm" id="ml-btn">Notify Me</button>
     </form>
@@ -384,6 +385,7 @@ document.getElementById("mailing-form").addEventListener("submit", async e => {
   const errEl   = document.getElementById("ml-error");
   const email   = document.getElementById("ml-email").value.trim().toLowerCase();
   const fname   = document.getElementById("ml-fname").value.trim();
+  const lname   = document.getElementById("ml-lname").value.trim();
 
   if (!email) { document.getElementById("ml-email").reportValidity(); return; }
 
@@ -393,7 +395,7 @@ document.getElementById("mailing-form").addEventListener("submit", async e => {
 
   const { createClient } = supabase;
   const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  const { error } = await db.from("mailing_list").insert({ email, first_name: fname || null });
+  const { error } = await db.from("mailing_list").insert({ email, first_name: fname || null, last_name: lname || null });
 
   if (error) {
     if (error.code === "23505") {

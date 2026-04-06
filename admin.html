@@ -267,6 +267,124 @@
     <div id="events-table-wrap">
       <div class="empty-state">Loading events…</div>
     </div>
+
+    <!-- Mailing list section -->
+    <div style="margin-top:2.5rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:1rem;">
+        <h2 style="font-size:1.2rem;font-weight:800;color:var(--green);margin:0;">📬 Mailing List</h2>
+        <div style="display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+          <span id="ml-count" class="text-gray text-sm"></span>
+          <label class="btn btn-ghost btn-sm" style="cursor:pointer;">
+            Import CSV
+            <input type="file" id="ml-csv-input" accept=".csv" style="display:none;" />
+          </label>
+        </div>
+      </div>
+
+      <!-- CSV preview -->
+      <div id="ml-csv-preview" style="display:none;background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);margin-bottom:1rem;">
+        <div style="background:var(--green);color:#fff;padding:0.6rem 1rem;font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;display:flex;justify-content:space-between;align-items:center;">
+          <span id="ml-preview-title">Preview</span>
+          <button id="ml-preview-close" style="background:none;border:none;color:#fff;font-size:1.2rem;cursor:pointer;opacity:0.8;line-height:1;">×</button>
+        </div>
+        <div style="padding:1rem;">
+          <div id="ml-preview-table-wrap" style="max-height:260px;overflow-y:auto;margin-bottom:1rem;"></div>
+          <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
+            <button id="ml-import-btn" class="btn btn-green">Import All →</button>
+            <span id="ml-import-status" style="font-size:0.88rem;"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Current subscribers table -->
+      <div id="ml-table-wrap">
+        <div class="empty-state">Loading subscribers…</div>
+      </div>
+    </div>
+
+    <!-- Newsletter section -->
+    <div style="margin-top:2.5rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:0.75rem;margin-bottom:1rem;">
+        <h2 style="font-size:1.2rem;font-weight:800;color:var(--green);margin:0;">✉️ Send Newsletter</h2>
+        <span id="nl-recipient-count" class="text-gray text-sm"></span>
+      </div>
+
+      <div style="background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;box-shadow:var(--shadow);">
+        <!-- Exclude registrants -->
+        <div class="field" style="margin-bottom:1rem;">
+          <label for="nl-event">Exclude people already registered for</label>
+          <select id="nl-event" style="width:100%;padding:0.5rem 0.75rem;border:1px solid var(--border);border-radius:6px;font-size:0.9rem;background:#fff;">
+            <option value="">— Send to all subscribers —</option>
+          </select>
+          <small style="color:var(--text-light);">Recipients = subscribers who have NOT registered for this event (and haven't unsubscribed).</small>
+        </div>
+
+        <!-- Subject -->
+        <div class="field" style="margin-bottom:1rem;">
+          <label for="nl-subject">Subject line *</label>
+          <input type="text" id="nl-subject" placeholder="The next Tour De Pints is almost here!" />
+        </div>
+
+        <!-- Headline -->
+        <div class="field" style="margin-bottom:1rem;">
+          <label for="nl-headline">Email headline *</label>
+          <input type="text" id="nl-headline" placeholder="Ride's coming up — have you signed up?" />
+        </div>
+
+        <!-- Body -->
+        <div class="field" style="margin-bottom:1rem;">
+          <label for="nl-body">Body text *</label>
+          <textarea id="nl-body" rows="6" placeholder="Write your message here. Line breaks are preserved."></textarea>
+        </div>
+
+        <!-- Optional CTA -->
+        <div class="form-section-label">Optional Call-to-Action Button</div>
+        <div class="form-grid two-col" style="margin-bottom:1.25rem;">
+          <div class="field">
+            <label for="nl-cta-label">Button label</label>
+            <input type="text" id="nl-cta-label" placeholder="Register Now" />
+          </div>
+          <div class="field">
+            <label for="nl-cta-url">Button URL</label>
+            <input type="url" id="nl-cta-url" placeholder="https://tourdepints.com/event.html?id=..." />
+          </div>
+        </div>
+
+        <!-- Test send -->
+        <div class="form-section-label">Test Before Sending</div>
+        <div style="display:flex;gap:0.5rem;align-items:flex-end;flex-wrap:wrap;margin-bottom:1.25rem;">
+          <div class="field" style="flex:1;min-width:200px;margin:0;">
+            <label for="nl-test-email">Send test to</label>
+            <input type="email" id="nl-test-email" placeholder="you@example.com" />
+          </div>
+          <button id="nl-preview-btn" class="btn btn-ghost btn-sm" style="white-space:nowrap;">Preview Email</button>
+          <button id="nl-test-btn" class="btn btn-outline btn-sm" style="white-space:nowrap;">Send Test →</button>
+        </div>
+
+        <div style="display:flex;gap:0.75rem;align-items:center;flex-wrap:wrap;">
+          <button id="nl-copy-bcc-btn" class="btn btn-gold">Copy BCC List →</button>
+          <button id="nl-send-btn" class="btn btn-green">Send via Resend →</button>
+          <span id="nl-status" style="font-size:0.88rem;"></span>
+        </div>
+        <p style="color:var(--text-light);font-size:0.78rem;margin-top:0.6rem;">
+          <strong>Copy BCC List</strong> — copies filtered emails to clipboard; paste into Gmail's BCC field and write normally from your own account.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── EMAIL PREVIEW MODAL ── -->
+<div class="overlay" id="nl-preview-overlay">
+  <div class="modal" style="max-width:660px;">
+    <div class="modal-header">
+      <span>Email Preview</span>
+      <button class="modal-close" id="nl-preview-close" title="Close">×</button>
+    </div>
+    <div style="padding:0;background:#f5f5f5;">
+      <iframe id="nl-preview-frame" style="width:100%;height:540px;border:none;display:block;" title="Email preview"></iframe>
+    </div>
   </div>
 </div>
 
@@ -713,6 +831,410 @@ async function deleteEvent(id, title) {
   if (error) { alert("Error: " + error.message); return; }
   loadEvents();
 }
+
+// ── Mailing list ──────────────────────────────────────────────────────────────
+async function loadMailingList() {
+  const wrap = document.getElementById("ml-table-wrap");
+  const { data, error } = await db
+    .from("mailing_list")
+    .select("id, email, first_name, last_name, signed_up_at, unsubscribed")
+    .order("signed_up_at", { ascending: false });
+
+  if (error) {
+    wrap.innerHTML = `<div class="empty-state" style="color:#c53030;">Error: ${error.message}</div>`;
+    return;
+  }
+
+  document.getElementById("ml-count").textContent = `${(data||[]).length} subscriber${data.length !== 1 ? "s" : ""}`;
+
+  if (!data || !data.length) {
+    wrap.innerHTML = `<div class="empty-state">No subscribers yet.</div>`;
+    return;
+  }
+
+  const rows = data.map(r => {
+    const date = new Date(r.signed_up_at).toLocaleDateString("en-US", { month:"short", day:"numeric", year:"numeric" });
+    const name = [r.first_name, r.last_name].filter(Boolean).join(" ") || "—";
+    const sub  = r.unsubscribed
+      ? `<span class="status-badge draft">Unsubscribed</span>`
+      : `<span class="status-badge pub">Subscribed</span>`;
+    return `<tr>
+      <td>${name}</td>
+      <td>${r.email}</td>
+      <td>${date}</td>
+      <td>${sub}</td>
+    </tr>`;
+  }).join("");
+
+  wrap.innerHTML = `
+    <table class="events-table">
+      <thead><tr><th>Name</th><th>Email</th><th>Signed Up</th><th>Status</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+// ── CSV import ────────────────────────────────────────────────────────────────
+let csvRows = [];
+
+document.getElementById("ml-csv-input").addEventListener("change", e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => parseCSV(ev.target.result);
+  reader.readAsText(file);
+  e.target.value = ""; // allow re-selecting same file
+});
+
+function parseCSV(text) {
+  const lines = text.trim().split(/\r?\n/).filter(Boolean);
+  if (!lines.length) return;
+
+  // Detect header row — look for "email" in first line
+  const firstLine = lines[0].toLowerCase();
+  const hasHeader = firstLine.includes("email");
+  const dataLines = hasHeader ? lines.slice(1) : lines;
+
+  // Find column indices from header (or assume col 0 = email, col 1 = first name)
+  let emailIdx = 0, firstIdx = 1, lastIdx = -1;
+  if (hasHeader) {
+    const headers = lines[0].split(",").map(h => h.trim().toLowerCase().replace(/"/g, ""));
+    emailIdx = headers.findIndex(h => h.includes("email"));
+    firstIdx = headers.findIndex(h => h.includes("first") || h === "name");
+    lastIdx  = headers.findIndex(h => h.includes("last"));
+    if (emailIdx === -1) emailIdx = 0;
+    if (firstIdx === -1) firstIdx = 1;
+  }
+
+  csvRows = dataLines.map(line => {
+    const cols = line.split(",").map(c => c.trim().replace(/^"|"$/g, ""));
+    return {
+      email:      (cols[emailIdx] || "").toLowerCase(),
+      first_name: firstIdx >= 0 ? (cols[firstIdx] || "") || null : null,
+      last_name:  lastIdx  >= 0 ? (cols[lastIdx]  || "") || null : null,
+    };
+  }).filter(r => r.email && r.email.includes("@"));
+
+  showCSVPreview();
+}
+
+function showCSVPreview() {
+  const preview = document.getElementById("ml-csv-preview");
+  const title   = document.getElementById("ml-preview-title");
+  const wrap    = document.getElementById("ml-preview-table-wrap");
+
+  title.textContent = `${csvRows.length} valid email${csvRows.length !== 1 ? "s" : ""} found — review before importing`;
+
+  const rows = csvRows.slice(0, 50).map(r => {
+    const name = [r.first_name, r.last_name].filter(Boolean).join(" ") || "—";
+    return `<tr><td style="padding:0.35rem 0.75rem;">${name}</td><td style="padding:0.35rem 0.75rem;">${r.email}</td></tr>`;
+  }).join("");
+  const more = csvRows.length > 50 ? `<tr><td colspan="2" style="padding:0.5rem 0.75rem;color:#888;font-size:0.82rem;">…and ${csvRows.length - 50} more</td></tr>` : "";
+
+  wrap.innerHTML = `
+    <table style="width:100%;border-collapse:collapse;font-size:0.88rem;">
+      <thead><tr>
+        <th style="text-align:left;padding:0.35rem 0.75rem;background:#f0f4f0;border-bottom:1px solid #e2e8f0;">Name</th>
+        <th style="text-align:left;padding:0.35rem 0.75rem;background:#f0f4f0;border-bottom:1px solid #e2e8f0;">Email</th>
+      </tr></thead>
+      <tbody>${rows}${more}</tbody>
+    </table>`;
+
+  document.getElementById("ml-import-status").textContent = "";
+  preview.style.display = "block";
+}
+
+document.getElementById("ml-preview-close").addEventListener("click", () => {
+  document.getElementById("ml-csv-preview").style.display = "none";
+  csvRows = [];
+});
+
+document.getElementById("ml-import-btn").addEventListener("click", async () => {
+  if (!csvRows.length) return;
+  const btn    = document.getElementById("ml-import-btn");
+  const status = document.getElementById("ml-import-status");
+  btn.disabled    = true;
+  btn.textContent = "Importing…";
+  status.textContent = "";
+  status.style.color = "";
+
+  // Upsert in batches of 50 — ignore duplicates via onConflict
+  let imported = 0, skipped = 0;
+  for (let i = 0; i < csvRows.length; i += 50) {
+    const batch = csvRows.slice(i, i + 50);
+    const { error, count } = await db
+      .from("mailing_list")
+      .upsert(batch, { onConflict: "email", ignoreDuplicates: true })
+      .select();
+    if (error) {
+      status.textContent = `Error: ${error.message}`;
+      status.style.color = "#c53030";
+      btn.disabled = false;
+      btn.textContent = "Import All →";
+      return;
+    }
+  }
+
+  status.textContent = `✅ Done! ${csvRows.length} row${csvRows.length !== 1 ? "s" : ""} processed (duplicates skipped automatically).`;
+  status.style.color = "var(--green)";
+  btn.disabled    = false;
+  btn.textContent = "Import All →";
+  csvRows = [];
+  loadMailingList();
+});
+
+// Wire mailing list load into auth state
+db.auth.onAuthStateChange((event, session) => {
+  if (session) loadMailingList();
+});
+
+// ── Newsletter ────────────────────────────────────────────────────────────────
+function populateNewsletterEventDropdown() {
+  const sel = document.getElementById("nl-event");
+  if (!sel) return;
+  // Clear existing options except the first
+  while (sel.options.length > 1) sel.remove(1);
+  allEvents.forEach(ev => {
+    const opt = document.createElement("option");
+    opt.value = ev.slug;
+    opt.textContent = ev.title;
+    sel.appendChild(opt);
+  });
+}
+
+// Update recipient count estimate when event selection changes
+document.getElementById("nl-event").addEventListener("change", async () => {
+  const slug    = document.getElementById("nl-event").value;
+  const countEl = document.getElementById("nl-recipient-count");
+  countEl.textContent = "Calculating…";
+
+  // Total active subscribers
+  const { count: totalCount } = await db
+    .from("mailing_list")
+    .select("*", { count: "exact", head: true })
+    .eq("unsubscribed", false);
+
+  if (!slug) {
+    countEl.textContent = `${totalCount || 0} recipient${totalCount !== 1 ? "s" : ""}`;
+    return;
+  }
+
+  // Already registered for this event
+  const { count: regCount } = await db
+    .from("registrations")
+    .select("*", { count: "exact", head: true })
+    .eq("event_slug", slug);
+
+  const est = Math.max(0, (totalCount || 0) - (regCount || 0));
+  countEl.textContent = `~${est} recipient${est !== 1 ? "s" : ""} (${totalCount || 0} subscribers − ${regCount || 0} already registered)`;
+});
+
+// Build the email HTML locally (mirrors the edge function template)
+function buildPreviewHtml({ first_name = "Friend", email = "preview@example.com", headline, body_text, cta_label, cta_url }) {
+  const greeting = `Hi ${first_name},`;
+  const unsubUrl = `https://tourdepints.com/unsubscribe.html?email=${encodeURIComponent(email)}`;
+  const ctaHtml  = cta_url
+    ? `<div style="text-align:center;margin:2rem 0;">
+         <a href="${cta_url}" style="background:#F6C915;color:#15100A;padding:12px 28px;border-radius:6px;font-weight:700;text-decoration:none;font-size:1rem;">${cta_label || "Learn More"}</a>
+       </div>`
+    : "";
+  return `<!DOCTYPE html><html><body style="margin:0;padding:0;background:#f5f5f5;font-family:sans-serif;">
+  <div style="max-width:600px;margin:0 auto;background:#fff;">
+    <div style="background:#1B4332;padding:24px;text-align:center;">
+      <div style="color:#F6C915;font-size:1.5rem;font-weight:800;">🚴 Seattle Tour De Pints</div>
+    </div>
+    <div style="padding:32px 28px;">
+      <p style="color:#555;margin:0 0 1.25rem;">${greeting}</p>
+      <h2 style="color:#1B4332;margin:0 0 1rem;">${headline || "(no headline)"}</h2>
+      <div style="color:#444;line-height:1.7;">${(body_text || "(no body)").replace(/\n/g, "<br>")}</div>
+      ${ctaHtml}
+    </div>
+    <div style="background:#f9f9f9;padding:20px;text-align:center;border-top:1px solid #eee;font-size:0.78rem;color:#888;">
+      You're receiving this because you signed up at tourdepints.com.<br>
+      <a href="${unsubUrl}" style="color:#888;">Unsubscribe</a>
+    </div>
+  </div>
+</body></html>`;
+}
+
+// Preview button
+document.getElementById("nl-preview-btn").addEventListener("click", () => {
+  const html = buildPreviewHtml({
+    headline:  document.getElementById("nl-headline").value.trim(),
+    body_text: document.getElementById("nl-body").value.trim(),
+    cta_label: document.getElementById("nl-cta-label").value.trim(),
+    cta_url:   document.getElementById("nl-cta-url").value.trim(),
+  });
+  const frame = document.getElementById("nl-preview-frame");
+  frame.srcdoc = html;
+  document.getElementById("nl-preview-overlay").classList.add("open");
+});
+document.getElementById("nl-preview-close").addEventListener("click", () => {
+  document.getElementById("nl-preview-overlay").classList.remove("open");
+});
+document.getElementById("nl-preview-overlay").addEventListener("click", e => {
+  if (e.target === document.getElementById("nl-preview-overlay"))
+    document.getElementById("nl-preview-overlay").classList.remove("open");
+});
+
+// Send test
+document.getElementById("nl-test-btn").addEventListener("click", async () => {
+  const btn      = document.getElementById("nl-test-btn");
+  const status   = document.getElementById("nl-status");
+  const testEmail = document.getElementById("nl-test-email").value.trim();
+  const subject   = document.getElementById("nl-subject").value.trim();
+  const headline  = document.getElementById("nl-headline").value.trim();
+  const body      = document.getElementById("nl-body").value.trim();
+
+  if (!testEmail) { alert("Enter a test email address first."); return; }
+  if (!subject || !headline || !body) {
+    status.style.color = "#c53030";
+    status.textContent = "Fill in subject, headline, and body before sending a test.";
+    return;
+  }
+
+  btn.disabled    = true;
+  btn.textContent = "Sending…";
+  status.style.color = "";
+  status.textContent = "";
+
+  const { data, error } = await db.functions.invoke("send-newsletter", {
+    body: {
+      test_email: testEmail,
+      subject:    `[TEST] ${subject}`,
+      headline:   document.getElementById("nl-headline").value.trim(),
+      body_text:  body,
+      cta_label:  document.getElementById("nl-cta-label").value.trim() || null,
+      cta_url:    document.getElementById("nl-cta-url").value.trim()   || null,
+    }
+  });
+
+  btn.disabled    = false;
+  btn.textContent = "Send Test →";
+
+  if (error || (data && data.error)) {
+    status.style.color = "#c53030";
+    status.textContent = `Error: ${(data && data.error) || error.message}`;
+    return;
+  }
+  status.style.color = "var(--green)";
+  status.textContent = `✅ Test sent to ${testEmail}`;
+});
+
+document.getElementById("nl-copy-bcc-btn").addEventListener("click", async () => {
+  const btn    = document.getElementById("nl-copy-bcc-btn");
+  const status = document.getElementById("nl-status");
+  const slug   = document.getElementById("nl-event").value;
+
+  btn.disabled    = true;
+  btn.textContent = "Loading…";
+  status.style.color = "";
+  status.textContent = "";
+
+  // Get active subscribers
+  const { data: subscribers, error } = await db
+    .from("mailing_list")
+    .select("email")
+    .eq("unsubscribed", false);
+
+  if (error) {
+    status.style.color = "#c53030";
+    status.textContent = `Error: ${error.message}`;
+    btn.disabled    = false;
+    btn.textContent = "Copy BCC List →";
+    return;
+  }
+
+  // Exclude registrants for selected event
+  const excludeSet = new Set();
+  if (slug) {
+    const { data: regs } = await db
+      .from("registrations")
+      .select("email")
+      .eq("event_slug", slug);
+    (regs || []).forEach(r => excludeSet.add(r.email.toLowerCase()));
+  }
+
+  const emails = (subscribers || [])
+    .map(s => s.email.toLowerCase())
+    .filter(e => !excludeSet.has(e));
+
+  if (!emails.length) {
+    status.style.color = "#c53030";
+    status.textContent = "No recipients found.";
+    btn.disabled    = false;
+    btn.textContent = "Copy BCC List →";
+    return;
+  }
+
+  await navigator.clipboard.writeText(emails.join(", "));
+
+  btn.disabled    = false;
+  btn.textContent = "Copy BCC List →";
+  status.style.color = "var(--green)";
+  status.textContent = `✅ ${emails.length} email${emails.length !== 1 ? "s" : ""} copied to clipboard — paste into Gmail's BCC field.`;
+});
+
+document.getElementById("nl-send-btn").addEventListener("click", async () => {
+  const btn     = document.getElementById("nl-send-btn");
+  const status  = document.getElementById("nl-status");
+  const subject = document.getElementById("nl-subject").value.trim();
+  const headline = document.getElementById("nl-headline").value.trim();
+  const body    = document.getElementById("nl-body").value.trim();
+  const slug    = document.getElementById("nl-event").value;
+  const ctaLabel = document.getElementById("nl-cta-label").value.trim();
+  const ctaUrl   = document.getElementById("nl-cta-url").value.trim();
+
+  if (!subject || !headline || !body) {
+    status.style.color = "#c53030";
+    status.textContent = "Subject, headline, and body are required.";
+    return;
+  }
+
+  const recipientText = document.getElementById("nl-recipient-count").textContent;
+  if (!confirm(`Send newsletter to ${recipientText}?\n\nSubject: "${subject}"\n\nThis cannot be undone.`)) return;
+
+  btn.disabled    = true;
+  btn.textContent = "Sending…";
+  status.style.color = "";
+  status.textContent = "";
+
+  const { data, error } = await db.functions.invoke("send-newsletter", {
+    body: {
+      event_slug: slug || null,
+      subject,
+      headline,
+      body_text: body,
+      cta_label: ctaLabel || null,
+      cta_url:   ctaUrl   || null,
+    }
+  });
+
+  btn.disabled    = false;
+  btn.textContent = "Send Newsletter →";
+
+  if (error || (data && data.error)) {
+    status.style.color = "#c53030";
+    status.textContent = `Error: ${(data && data.error) || error.message}`;
+    return;
+  }
+
+  status.style.color = "var(--green)";
+  status.textContent = `✅ Sent to ${data.sent} recipient${data.sent !== 1 ? "s" : ""}${data.skipped ? ` (${data.skipped} skipped — already registered)` : ""}.`;
+
+  // Clear form
+  ["nl-subject","nl-headline","nl-body","nl-cta-label","nl-cta-url"].forEach(id => {
+    document.getElementById(id).value = "";
+  });
+  document.getElementById("nl-event").value = "";
+  document.getElementById("nl-recipient-count").textContent = "";
+});
+
+// Populate dropdown whenever events are refreshed
+const _origLoadEvents = loadEvents;
+loadEvents = async function() {
+  await _origLoadEvents();
+  populateNewsletterEventDropdown();
+};
 </script>
 </body>
 </html>

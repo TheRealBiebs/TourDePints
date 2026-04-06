@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unsubscribe — Seattle Tour De Pints</title>
+  <link rel="icon" href="images/rider.png" type="image/png" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="site-brand">
+      <img src="images/rider.png" alt="Tour De Pints" class="brand-logo" />
+      <span>Seattle Tour De Pints</span>
+    </a>
+  </div>
+</header>
+
+<div style="max-width:520px;margin:4rem auto;padding:2rem 1.5rem;text-align:center;">
+  <div id="unsub-card" style="background:var(--bar-mid);border:1px solid var(--border);border-radius:var(--radius);padding:2.5rem 2rem;box-shadow:var(--shadow);">
+    <div id="unsub-content">
+      <div style="font-size:2rem;margin-bottom:1rem;">📬</div>
+      <h2 style="color:var(--gold);margin-bottom:0.5rem;">Unsubscribe</h2>
+      <p style="color:var(--text-mid);font-size:0.9rem;margin-bottom:1.5rem;">
+        Enter your email below to stop receiving newsletters from Seattle Tour De Pints.<br>
+        You can always re-subscribe on the <a href="index.html#community">homepage</a>.
+      </p>
+      <div style="display:flex;gap:0.5rem;margin-bottom:1.25rem;">
+        <input type="email" id="unsub-email-input" placeholder="your@email.com"
+               style="flex:1;padding:0.55rem 0.75rem;border:1px solid var(--border);border-radius:6px;font-size:0.95rem;background:var(--bg);" />
+        <button id="unsub-btn" class="btn btn-green" style="white-space:nowrap;">Unsubscribe</button>
+      </div>
+      <p id="unsub-inline-error" style="display:none;color:#e07070;font-size:0.85rem;margin-bottom:1rem;"></p>
+      <a href="index.html" style="color:var(--text-light);font-size:0.85rem;">Never mind, take me home</a>
+    </div>
+
+    <div id="unsub-success" style="display:none;">
+      <div style="font-size:2.5rem;margin-bottom:1rem;">👋</div>
+      <h2 style="color:var(--gold);margin-bottom:0.75rem;">You're unsubscribed.</h2>
+      <p style="color:var(--text-mid);margin-bottom:1.5rem;">
+        You won't receive any more newsletters. Hope to see you on a future ride!
+      </p>
+      <a href="index.html" class="btn btn-gold">Back to Homepage</a>
+    </div>
+
+    <div id="unsub-error" style="display:none;">
+      <div style="font-size:2rem;margin-bottom:1rem;">⚠️</div>
+      <h2 style="color:#e07070;margin-bottom:0.75rem;">Something went wrong.</h2>
+      <p id="unsub-error-msg" style="color:var(--text-mid);margin-bottom:1.5rem;"></p>
+      <a href="index.html" class="btn btn-ghost">Back to Homepage</a>
+    </div>
+  </div>
+</div>
+
+<div id="site-footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/footer.js"></script>
+<script>
+// Pre-fill email from URL param if present (clicked link in email)
+const prefill = new URLSearchParams(window.location.search).get("email") || "";
+if (prefill) document.getElementById("unsub-email-input").value = prefill;
+
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+document.getElementById("unsub-btn").addEventListener("click", async () => {
+  const btn       = document.getElementById("unsub-btn");
+  const errEl     = document.getElementById("unsub-inline-error");
+  const email     = document.getElementById("unsub-email-input").value.trim().toLowerCase();
+
+  errEl.style.display = "none";
+
+  if (!email || !email.includes("@")) {
+    errEl.textContent   = "Please enter a valid email address.";
+    errEl.style.display = "block";
+    return;
+  }
+
+  btn.disabled    = true;
+  btn.textContent = "Unsubscribing…";
+
+  const { data, error } = await db.functions.invoke("unsubscribe", { body: { email } });
+
+  if (error || (data && data.error)) {
+    errEl.textContent   = (data && data.error) || error.message;
+    errEl.style.display = "block";
+    btn.disabled    = false;
+    btn.textContent = "Unsubscribe";
+    return;
+  }
+
+  document.getElementById("unsub-content").style.display = "none";
+  document.getElementById("unsub-success").style.display = "block";
+});
+</script>
+</body>
+</html>
