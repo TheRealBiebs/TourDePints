@@ -226,10 +226,10 @@
 <script>
 // ── Read URL params ───────────────────────────────────────────────────────
 const params    = new URLSearchParams(window.location.search);
-const eventSlug = params.get("slug")  || "";
-const firstName = params.get("fname") || "";
-const lastName  = params.get("lname") || "";
-const email     = params.get("email") || "";
+const eventSlug = params.get("slug")    || "";
+const firstName = params.get("fname")   || "";
+const lastName  = params.get("lname")   || "";
+const email     = params.get("email")   || "";
 const eventTitle    = decodeURIComponent(params.get("title") || "the event");
 const eventDate     = params.get("date")     || "";
 const eventTime     = params.get("time")     || "";

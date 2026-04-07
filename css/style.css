@@ -255,7 +255,7 @@ header nav a:hover, header nav a.active {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 4;
+  z-index: 1;
   overflow: hidden;
 }
 
@@ -705,7 +705,7 @@ a.btn-gold, a.btn-gold:visited { color: #3D1500; }
 
 .donate-card:hover {
   border-top-color: var(--gold-light);
-  transform: translateY(-3px);
+  transform: translateY(-3px) rotate(0.3deg);
   box-shadow: var(--shadow-lg);
   color: var(--text-dark);
 }
