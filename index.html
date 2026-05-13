@@ -301,11 +301,14 @@ function renderEventCard(ev) {
   const { createClient } = supabase;
   const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+  const todayStr = new Date().toISOString().slice(0, 10);
+
   try {
     const { data: events, error } = await db
       .from("events")
       .select("*")
       .eq("published", true)
+      .gte("event_date", todayStr)
       .order("event_date", { ascending: true });
 
     if (error) throw error;
@@ -313,7 +316,7 @@ function renderEventCard(ev) {
     list.innerHTML = "";
 
     if (!events || events.length === 0) {
-      list.innerHTML = `<p class="text-gray">No events scheduled yet — check back soon! 🚴</p>`;
+      list.innerHTML = `<p class="text-gray">No upcoming events scheduled yet — check back soon! 🚴</p>`;
       return;
     }
 
